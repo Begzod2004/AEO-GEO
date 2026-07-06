@@ -29,6 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen">
+        {/* With JS disabled, reveal animations never run — force content visible. */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
+        </noscript>
         <Aurora />
         <SmoothScroll>
           <Navbar />
