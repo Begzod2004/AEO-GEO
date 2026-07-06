@@ -14,4 +14,6 @@ urlpatterns = [
     path("api/", include("apps.website_manager.urls")),
     path("api/", include("apps.knowledge_base.urls")),
     path("api/", include("apps.ai_optimization.urls")),
+    path("api/", include("apps.ai_monitoring.urls")),
+    path("api/", include("apps.dashboard.urls")),
 ]

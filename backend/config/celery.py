@@ -7,12 +7,26 @@ their owning app during later stages.
 import os
 
 from celery import Celery
+from celery.schedules import crontab
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
 app = Celery("aeo_geo")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
+
+# ---------------------------------------------------------------------------
+# Periodic jobs (Celery Beat)
+# ---------------------------------------------------------------------------
+app.conf.beat_schedule = {
+    # Nightly (03:00 UTC) Dashboard refresh: recompute every organization's
+    # ScoreSnapshot so the trend line advances even on days with no manual scan.
+    # The task fans out one sub-task per org (see apps.dashboard.tasks).
+    "nightly-score-refresh": {
+        "task": "apps.dashboard.tasks.nightly_score_refresh",
+        "schedule": crontab(hour=3, minute=0),
+    },
+}
 
 
 @app.task(bind=True, ignore_result=True)

@@ -1,0 +1,163 @@
+/* Fonts — bundled via @fontsource so the app builds and runs fully offline. */
+@import "@fontsource-variable/inter/index.css";
+@import "@fontsource/space-grotesk/400.css";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/space-grotesk/700.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/700.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/* Design tokens. Semantic colors are space-separated RGB channels so   */
+/* Tailwind's `/ <alpha-value>` opacity utilities work everywhere.       */
+/* ------------------------------------------------------------------ */
+@layer base {
+  :root,
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --bg: 8 11 18; /* #080B12 observatory ink */
+    --bg-elevated: 14 19 30;
+    --surface: 18 24 38; /* #121826 card */
+    --surface-2: 26 34 52; /* #1A2234 input / hover */
+    --line: 148 163 184; /* used at low alpha for hairlines */
+    --line-strong: 148 163 184;
+    --text: 230 234 243; /* #E6EAF3 */
+    --muted: 139 147 167; /* #8B93A7 */
+    --faint: 90 98 116; /* #5A6274 */
+    --brand: 124 107 255; /* #7C6BFF iris */
+    --brand-hover: 142 128 255;
+    --brand-soft: 124 107 255;
+    --brand-fg: 245 246 255;
+    --good: 52 211 153; /* #34D399 */
+    --fair: 251 191 36; /* #FBBF24 */
+    --poor: 247 109 109; /* #F76D6D */
+    --line-alpha: 0.1;
+    --grid-alpha: 0.06;
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
+    --bg: 244 246 251; /* #F4F6FB soft daylight */
+    --bg-elevated: 255 255 255;
+    --surface: 255 255 255;
+    --surface-2: 240 243 249;
+    --line: 30 41 59;
+    --line-strong: 30 41 59;
+    --text: 17 24 39; /* #111827 */
+    --muted: 90 99 122;
+    --faint: 140 149 168;
+    --brand: 91 71 235; /* #5B47EB darkened iris for AA on white */
+    --brand-hover: 76 56 220;
+    --brand-soft: 124 107 255;
+    --brand-fg: 255 255 255;
+    --good: 5 150 105; /* #059669 */
+    --fair: 180 120 8; /* #B47808 */
+    --poor: 220 68 68; /* #DC4444 */
+    --line-alpha: 0.12;
+    --grid-alpha: 0.09;
+  }
+
+  * {
+    border-color: rgb(var(--line) / var(--line-alpha));
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+    font-feature-settings: "cv05", "ss01";
+    min-height: 100dvh;
+  }
+
+  /* A faint spectral aurora behind the app — the "signal" atmosphere. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(60rem 40rem at 12% -10%, rgb(124 107 255 / 0.12), transparent 60%),
+      radial-gradient(50rem 40rem at 100% 0%, rgb(45 212 191 / 0.08), transparent 55%);
+  }
+  [data-theme="light"] body::before {
+    background:
+      radial-gradient(60rem 40rem at 12% -10%, rgb(124 107 255 / 0.1), transparent 60%),
+      radial-gradient(50rem 40rem at 100% 0%, rgb(56 189 248 / 0.08), transparent 55%);
+  }
+
+  ::selection {
+    background: rgb(var(--brand) / 0.28);
+    color: rgb(var(--text));
+  }
+
+  /* Consistent, visible keyboard focus everywhere. */
+  :focus-visible {
+    outline: 2px solid rgb(var(--brand));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Tabular, aligned numerals for all data readouts. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  /* Custom scrollbars that match the ink theme. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--line) / 0.25) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: rgb(var(--line) / 0.2);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--line) / 0.35);
+    background-clip: content-box;
+  }
+}
+
+@layer components {
+  /* The eyebrow: a mono, uppercase, tracked label — the instrument voice. */
+  .eyebrow {
+    @apply font-mono text-eyebrow uppercase text-muted;
+  }
+
+  .card-surface {
+    @apply rounded-card border bg-surface shadow-card;
+  }
+
+  /* Subtle noise/grid texture used on hero panels. */
+  .grid-texture {
+    background-image:
+      linear-gradient(rgb(var(--line) / var(--grid-alpha)) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--line) / var(--grid-alpha)) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

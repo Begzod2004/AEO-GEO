@@ -27,5 +27,13 @@ gunicorn>=22.0,<24.0
 # --- Website Manager (Stage 3): crawling ---
 beautifulsoup4>=4.12,<5.0
 
+# --- AI Monitoring (Stage 6): live provider SDKs + retry ---
+# Lazy-imported and only needed when a provider runs live; mock mode never
+# imports these (see apps.ai_monitoring.gateway). OpenAI's SDK is already listed
+# above for live embeddings and is reused for live monitoring calls.
+anthropic>=0.40,<1.0
+google-generativeai>=0.8,<1.0
+tenacity>=8.0,<10.0
+
 # NOTE: stage-specific dependencies (crawling, document parsing, AI SDKs)
 # are added to this file in their respective build stage.
