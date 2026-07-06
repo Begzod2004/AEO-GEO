@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/* ---- Design tokens (fixed dark theme, per brief) ---- */
+@theme {
+  --color-base: #050816;
+  --color-surface: #0b1220;
+  --color-elevated: #0f1a2e;
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-ink: #e5e7eb;
+  --color-muted: #94a3b8;
+  --color-indigo: #6366f1;
+  --color-cyan: #22d3ee;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-base);
+    color: var(--color-ink);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--color-indigo) 45%, transparent);
+    color: #fff;
+  }
+}
+
+/* ---- Small, reusable utilities (kept minimal) ---- */
+.eyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.text-gradient {
+  background-image: linear-gradient(92deg, var(--color-indigo), var(--color-cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- Ambient aurora (one cheap global background) ---- */
+@keyframes aurora-drift {
+  0%,
+  100% {
+    transform: translate3d(-4%, -2%, 0) scale(1.05);
+  }
+  50% {
+    transform: translate3d(5%, 4%, 0) scale(1.18);
+  }
+}
+
+/* ---- Respect reduced motion everywhere ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
