@@ -141,6 +141,11 @@ CELERY_TIMEZONE = "UTC"
 CELERY_TASK_ALWAYS_EAGER = env.bool("CELERY_TASK_ALWAYS_EAGER", default=TESTING)
 CELERY_TASK_EAGER_PROPAGATES = True
 
+if TESTING:
+    # In-memory broker/result so the suite never needs Redis (or the redis lib).
+    CELERY_BROKER_URL = "memory://"
+    CELERY_RESULT_BACKEND = "cache+memory://"
+
 # ---------------------------------------------------------------------------
 # Vector DB (Qdrant)
 # ---------------------------------------------------------------------------

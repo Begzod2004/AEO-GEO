@@ -18,5 +18,8 @@ qdrant-client>=1.9,<2.0
 requests>=2.31,<3.0
 gunicorn>=22.0,<24.0
 
+# --- Website Manager (Stage 3): crawling ---
+beautifulsoup4>=4.12,<5.0
+
 # NOTE: stage-specific dependencies (crawling, document parsing, AI SDKs)
 # are added to this file in their respective build stage.
