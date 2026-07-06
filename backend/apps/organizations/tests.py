@@ -159,3 +159,77 @@ class RoleEnforcementTests(OrgTestBase):
             format="json",
         )
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class InviteAcceptFlowTests(OrgTestBase):
+    """The fixed invite flow: a new invitee can set a password and log in."""
+
+    def setUp(self):
+        self.auth(self.make_user("owner@ex.com"))
+        self.org = self.create_org("Acme").data["id"]
+
+    def test_new_invite_returns_token_and_can_be_accepted(self):
+        inv = self.client.post(
+            f"/api/organizations/{self.org}/invite/",
+            {"email": "new@ex.com", "role": Role.WRITER}, format="json",
+        )
+        self.assertEqual(inv.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(inv.data["status"], "invited")
+        token = inv.data["invite_token"]
+        self.assertTrue(token)
+
+        # cannot log in before accepting (no usable password yet)
+        self.client.credentials()
+        pre = self.client.post(
+            "/api/auth/login/",
+            {"email": "new@ex.com", "password": "Str0ngPass!23"}, format="json",
+        )
+        self.assertEqual(pre.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # accept -> set a real password
+        acc = self.client.post(
+            "/api/auth/accept-invite/",
+            {"token": token, "password": "Str0ngPass!23"}, format="json",
+        )
+        self.assertEqual(acc.status_code, status.HTTP_200_OK)
+
+        # now login works and the user is a member of the org
+        login = self.client.post(
+            "/api/auth/login/",
+            {"email": "new@ex.com", "password": "Str0ngPass!23"}, format="json",
+        )
+        self.assertEqual(login.status_code, status.HTTP_200_OK)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {login.data['access']}")
+        members = self.client.get(f"/api/organizations/{self.org}/members/")
+        self.assertEqual(members.status_code, status.HTTP_200_OK)
+
+    def test_existing_user_invite_is_added_without_token(self):
+        User.objects.create_user(email="exists@ex.com", password="Str0ngPass!23")
+        inv = self.client.post(
+            f"/api/organizations/{self.org}/invite/",
+            {"email": "exists@ex.com", "role": Role.VIEWER}, format="json",
+        )
+        self.assertEqual(inv.data["status"], "added")
+        self.assertNotIn("invite_token", inv.data)
+
+    def test_reused_or_invalid_token_rejected(self):
+        inv = self.client.post(
+            f"/api/organizations/{self.org}/invite/",
+            {"email": "once@ex.com", "role": Role.WRITER}, format="json",
+        )
+        token = inv.data["invite_token"]
+        self.client.credentials()
+        self.client.post(
+            "/api/auth/accept-invite/",
+            {"token": token, "password": "Str0ngPass!23"}, format="json",
+        )
+        again = self.client.post(
+            "/api/auth/accept-invite/",
+            {"token": token, "password": "Another123!"}, format="json",
+        )
+        self.assertEqual(again.status_code, status.HTTP_400_BAD_REQUEST)
+        bad = self.client.post(
+            "/api/auth/accept-invite/",
+            {"token": "garbage", "password": "Str0ngPass!23"}, format="json",
+        )
+        self.assertEqual(bad.status_code, status.HTTP_400_BAD_REQUEST)

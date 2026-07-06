@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from apps.accounts.invites import make_invite_token
 from apps.accounts.models import Role
 from apps.organizations.models import Domain, Membership, Organization
 from apps.organizations.permissions import HasRole, IsOrgMember
@@ -77,8 +78,19 @@ class OrganizationViewSet(viewsets.ModelViewSet):
             membership.role = role
             membership.save(update_fields=["role"])
 
+        data = MembershipSerializer(membership).data
+        # A user who can't log in yet (no usable password) needs an invite link
+        # to set one. Existing accounts are simply added.
+        if user.has_usable_password():
+            data["status"] = "added"
+        else:
+            token = make_invite_token(user.id)
+            data["status"] = "invited"
+            data["invite_token"] = token
+            data["invite_url"] = f"/accept-invite?token={token}"
+
         return Response(
-            MembershipSerializer(membership).data,
+            data,
             status=status.HTTP_201_CREATED if m_created else status.HTTP_200_OK,
         )
 
