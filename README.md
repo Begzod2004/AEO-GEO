@@ -37,6 +37,24 @@ Health check: `curl http://localhost:8000/api/health/` →
 > Infra ports (Postgres/Redis) are intentionally not published to the host to
 > avoid clashes. Use `docker compose exec postgres psql -U aeo aeo` to inspect.
 
+## Ready-made accounts (for review)
+
+One command creates a superuser and a **pre-populated demo account** (its org
+already has a document, crawl, schema, prompts, a scan and computed scores — so
+the dashboard is full on first login):
+
+```bash
+docker compose exec backend python manage.py seed_demo
+```
+
+| Account | Login | Password | Use |
+|---|---|---|---|
+| **Superuser** | `admin@aeo.geo` | `AeoAdmin2026!` | Django admin → http://localhost:8000/admin/ |
+| **Demo user** | `demo@aeo.geo` | `Signals2026!` | The app → http://localhost:5173 (full dashboard) |
+
+The command is idempotent — safe to re-run. Change these passwords before any
+real deployment.
+
 ## Mock vs live mode
 
 Everything works with **zero API keys** (mock mode): scans return a deterministic
