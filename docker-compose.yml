@@ -1,8 +1,8 @@
 # AEO.GEO — local development stack.
 #
-# `docker compose up` brings up the full backend: Postgres, Redis, Qdrant,
-# the Django web server, a Celery worker and a Celery beat scheduler.
-# Frontend is added in Stage 8.
+# `docker compose up` brings up the WHOLE product in one command: Postgres,
+# Redis, Qdrant, the Django web server, a Celery worker, a Celery beat
+# scheduler, and the React frontend (Vite dev server, proxying /api -> backend).
 #
 # Secrets/keys are read from a local `.env` file (git-ignored) via interpolation.
 # With no `.env` present, every AI key defaults to empty and the platform runs
@@ -92,6 +92,18 @@ services:
     <<: *backend-base
     command: celery -A config beat -l info
     ports: []
+
+  frontend:
+    build: ./frontend
+    image: aeo-geo-frontend:dev
+    environment:
+      # Vite proxies /api to the backend service over the internal network.
+      VITE_PROXY_TARGET: http://backend:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
 
 volumes:
   postgres_data:

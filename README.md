@@ -1,54 +1,128 @@
 # AEO.GEO
 
-AI visibility platform — track and improve how companies appear in AI answer
-engines (ChatGPT, Claude, Gemini, Perplexity, …).
+**Track and improve how your company appears in AI answer engines** (ChatGPT,
+Claude, Gemini, Perplexity, …). People increasingly ask an AI instead of
+Googling — AEO.GEO makes sure your business is found, described accurately, and
+cited as a trustworthy source in those AI answers.
 
-> **Status:** MVP in progress, built stage by stage. This README is expanded in
-> Stage 8. For the architecture rationale see [`docs/adr/`](docs/adr/).
+Multi-tenant SaaS. Django + DRF + Celery + PostgreSQL + Redis + Qdrant backend,
+React + TypeScript + Tailwind frontend. **Runs end-to-end with no AI API keys**
+thanks to a built-in mock mode (see [`docs/adr/001-mock-mode.md`](docs/adr/001-mock-mode.md)).
 
-## Quick start (local, Docker)
+---
+
+## Quick start — one command
 
 ```bash
-cp .env.example .env      # optional — runs in mock mode with no keys
+cp .env.example .env        # optional; with no keys it runs in mock mode
 docker compose up --build
 ```
 
-Then check the backend is alive:
+That brings up the whole product:
 
-```bash
-curl http://localhost:8000/api/health/
-# {"status":"ok","service":"aeo-geo-backend","mode":"mock","providers":{...}}
-```
+| Service | Port | What it is |
+|---|---|---|
+| **frontend** | http://localhost:5173 | React app (Vite), proxies `/api` → backend |
+| **backend** | http://localhost:8000 | Django + DRF API |
+| celery-worker | — | async scans, crawls, embeddings, schema |
+| celery-beat | — | nightly score refresh |
+| postgres / redis / qdrant | internal | database / cache+broker / vector DB |
 
-Services started: **postgres**, **redis**, **qdrant**, **backend** (Django),
-**celery-worker**, **celery-beat**.
+Open **http://localhost:5173**, register, create an organization, upload a
+document, run a scan, and watch the six scores appear on the Dashboard.
+
+Health check: `curl http://localhost:8000/api/health/` →
+`{"status":"ok","mode":"mock", ...}`.
+
+> Infra ports (Postgres/Redis) are intentionally not published to the host to
+> avoid clashes. Use `docker compose exec postgres psql -U aeo aeo` to inspect.
 
 ## Mock vs live mode
 
-The whole platform runs with **no AI API keys** (mock mode) so it is buildable
-and testable offline. Add a key to `.env` (e.g. `OPENAI_API_KEY=...`) to switch
-that provider to live. See [`docs/adr/001-mock-mode.md`](docs/adr/001-mock-mode.md).
+Everything works with **zero API keys** (mock mode): scans return a deterministic
+but realistic distribution, embeddings are 1536-dim (OpenAI-compatible), schema
+is generated from your real content. Add a key to `.env` (e.g. `OPENAI_API_KEY=…`
+or `ANTHROPIC_API_KEY=…`) and that provider automatically switches to live — no
+code change. See the ADR for the full rationale and the mock realism guarantees.
 
-## Layout
+## The core chain (Definition of Done)
 
 ```
-backend/          Django + DRF + Celery
-  config/         settings, urls, celery
+register → create org → add domain → upload document (chunk+embed → Qdrant)
+        → crawl site → generate schema.org JSON-LD
+        → generate prompt library → scan across AI providers
+        → compute 6 scores → Dashboard
+```
+
+Six scores (0–100, transparent formulas in `apps/dashboard/scoring.py`):
+**AI Visibility · GEO · AEO · SEO · Trust · Citation**.
+
+## Local development (without Docker)
+
+**Backend** (needs Python 3.12; Postgres/Redis/Qdrant optional — falls back to
+SQLite + localhost):
+
+```bash
+cd backend
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+python manage.py test apps        # 66 tests, fully offline
+```
+
+**Frontend** (needs Node 22) — with hot reload:
+
+```bash
+cd frontend
+npm install
+npm run dev                        # http://localhost:5173, /api → :8000
+npm run build                      # typecheck + production build
+```
+
+## Project layout
+
+```
+backend/
+  config/            settings, urls, celery (+ beat schedule)
   apps/
-    common/       mode switch, health, shared base models
-    accounts/         (Stage 2)  user, JWT auth, RBAC
-    organizations/    (Stage 2)  organization, membership, domain
-    website_manager/  (Stage 3)  crawl, sitemap, technical SEO
-    knowledge_base/   (Stage 4)  import, chunking, embedding, Qdrant
-    ai_optimization/  (Stage 5)  schema.org / JSON-LD generation
-    ai_monitoring/    (Stage 6)  prompt library, AI provider scans
-    dashboard/        (Stage 6)  score aggregation
-    billing/          (models only in MVP)
-docs/adr/         architecture decision records
-docker-compose.yml
+    common/          mock/live mode switch, health, base models
+    accounts/        email User, JWT auth (Redis-revocable refresh), Role enum
+    organizations/   Organization, Membership, Domain + IsOrgMember/HasRole
+    website_manager/ crawl (title/meta/canonical/robots/sitemap/broken links)
+    knowledge_base/  import → chunk → embed(1536) → Qdrant + semantic search
+    ai_optimization/ schema.org JSON-LD (FAQ/Organization) grounded in KB
+    ai_monitoring/   provider-agnostic gateway, Prompt library, Scan
+    dashboard/       ScoreSnapshot, 6-score formulas, dashboard endpoint
+    billing/         Subscription models (MVP: structure only)
+frontend/            React + TS + Tailwind ("Signal Spectrum" design)
+docs/
+  adr/               architecture decision records
+  api-contract.md    the full API contract
+docker-compose.yml   one-command full stack
 ```
 
-## Tech stack
+## Multi-tenancy & security
 
-Django · DRF · PostgreSQL · Redis · Celery · Qdrant · Docker Compose.
-Frontend (React + TypeScript + Tailwind) is added in Stage 7.
+Shared-schema multi-tenancy: every tenant-owned row has an `organization` FK,
+isolation is enforced in the ORM/queryset layer, and org identity is resolved
+from the URL + membership — never trusted from the request body. Roles are
+per-membership (one user can hold different roles in different orgs). No secrets
+in code — everything is read from environment variables.
+
+## API
+
+See [`docs/api-contract.md`](docs/api-contract.md) for every endpoint, request/
+response shape, the dashboard payload, and the score formulas. All
+organization-scoped routes are nested under
+`/api/organizations/{id}/…` and require `Authorization: Bearer <access>`.
+
+## Tests
+
+```bash
+cd backend && python manage.py test apps     # 66 tests, offline & deterministic
+cd frontend && npm run build                 # typecheck + build
+```
+
+The suite never touches external services: mock AI providers, in-memory Qdrant,
+in-memory Celery broker, LocMem cache.
