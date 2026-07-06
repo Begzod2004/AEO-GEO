@@ -38,6 +38,13 @@ export const authApi = {
     const { data } = await http.post<LoginResponse>("/auth/login/", body);
     return data;
   },
+  async acceptInvite(body: { token: string; password: string }) {
+    const { data } = await http.post<{ email: string; detail: string }>(
+      "/auth/accept-invite/",
+      body,
+    );
+    return data;
+  },
   async refresh(refresh: string) {
     const { data } = await http.post<{ access: string }>("/auth/refresh/", { refresh });
     return data;

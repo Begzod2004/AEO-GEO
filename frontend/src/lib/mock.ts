@@ -64,7 +64,7 @@ const db = {
         has_robots: true,
         has_sitemap: true,
         links_total: 84,
-        broken_links: ["https://northwind.io/legacy"],
+        broken_links: [{ url: "https://northwind.io/legacy", status: 404 }],
         performance_score: 78,
       },
     },

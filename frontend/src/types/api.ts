@@ -61,14 +61,22 @@ export interface CrawlMeta {
   has_robots?: boolean;
   has_sitemap?: boolean;
   links_total?: number;
-  broken_links?: string[];
+  broken_links?: BrokenLink[];
   performance_score?: number;
+}
+
+export interface BrokenLink {
+  url: string;
+  status?: number;
+  error?: string;
 }
 
 export interface CrawlResult {
   id: number | string;
   status?: string;
   domain?: number | string | null;
+  domain_url?: string;
+  error?: string;
   meta?: CrawlMeta;
   created_at?: string;
 }

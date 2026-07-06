@@ -155,9 +155,17 @@ function CrawlCard({ result }: { result: CrawlResult }) {
           <div className="mb-1.5 flex items-center gap-2">
             <IconGlobe className="h-4 w-4 text-muted" />
             <h3 className="truncate font-display text-base font-semibold text-text">
-              {m.title || "Untitled page"}
+              {m.title || result.domain_url || "Untitled page"}
             </h3>
+            {result.status === "failed" && (
+              <Badge tone="poor" dot>
+                Crawl failed
+              </Badge>
+            )}
           </div>
+          {result.status === "failed" && result.error && (
+            <p className="max-w-2xl text-sm text-poor/90">{result.error}</p>
+          )}
           {m.meta_description && <p className="max-w-2xl text-sm text-muted">{m.meta_description}</p>}
           {m.canonical && (
             <p className="mt-1.5 truncate font-mono text-xs text-faint">{m.canonical}</p>
@@ -197,8 +205,9 @@ function CrawlCard({ result }: { result: CrawlResult }) {
       {broken.length > 0 && (
         <ul className="mt-3 space-y-1">
           {broken.slice(0, 5).map((link) => (
-            <li key={link} className="truncate font-mono text-xs text-poor/90">
-              {link}
+            <li key={link.url} className="truncate font-mono text-xs text-poor/90">
+              {link.url}
+              {link.status ? ` — HTTP ${link.status}` : ""}
             </li>
           ))}
         </ul>

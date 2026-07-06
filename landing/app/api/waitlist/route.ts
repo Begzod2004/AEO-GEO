@@ -20,6 +20,13 @@ export async function POST(request: Request) {
     );
   }
 
-  await saveLead(email, new Date().toISOString());
+  try {
+    await saveLead(email, new Date().toISOString());
+  } catch {
+    return NextResponse.json(
+      { error: "Couldn't save your signup right now. Try again shortly." },
+      { status: 502 },
+    );
+  }
   return NextResponse.json({ ok: true });
 }

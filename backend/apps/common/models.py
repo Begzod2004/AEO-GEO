@@ -12,3 +12,13 @@ class TimeStampedModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class Lead(TimeStampedModel):
+    """Marketing waitlist signup (from the landing page). Not tenant-scoped."""
+
+    email = models.EmailField(unique=True)
+    source = models.CharField(max_length=40, blank=True, default="landing")
+
+    def __str__(self):
+        return self.email
