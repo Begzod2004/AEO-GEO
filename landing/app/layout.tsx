@@ -5,18 +5,30 @@ import { Aurora } from "@/components/site/Aurora";
 import { Footer } from "@/components/site/Footer";
 import { Navbar } from "@/components/site/Navbar";
 import { SmoothScroll } from "@/components/site/SmoothScroll";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://aeo.geo"),
-  title: {
-    default: "AEO.GEO — Be understood by AI answer engines",
-    template: "%s · AEO.GEO",
+  metadataBase: new URL(SITE_URL),
+  title: { default: SITE_TITLE, template: "%s · AEO.GEO" },
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "/" },
+  icons: { icon: [{ url: "/favicon.svg", type: "image/svg+xml" }] },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "AEO.GEO",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
   },
-  description:
-    "Optimize your business for ChatGPT, Gemini, Claude, Perplexity and the next generation of AI search. Crawl, structure and monitor how AI answers talk about your brand.",
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {

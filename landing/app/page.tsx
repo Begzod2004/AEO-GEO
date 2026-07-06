@@ -1,4 +1,5 @@
 import { Hero } from "@/components/hero/Hero";
+import { JsonLd } from "@/components/site/JsonLd";
 import { AIVisibilityDemo } from "@/components/sections/AIVisibilityDemo";
 import { DashboardPreview } from "@/components/sections/DashboardPreview";
 import { FactsRow } from "@/components/sections/FactsRow";
@@ -12,6 +13,7 @@ import { ScrollStory } from "@/components/sections/ScrollStory";
 export default function Home() {
   return (
     <>
+      <JsonLd />
       <Hero />
       <PlatformsRow />
       <ScrollStory />

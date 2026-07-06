@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AEO.GEO — Marketing landing
 
-## Getting Started
+Standalone Next.js (App Router) marketing site for AEO.GEO. Separate from the
+product dashboard (`../frontend`, Vite SPA) because the landing must be
+server-rendered: **this product sells AI-readability, so its own site is the
+demo** — full HTML without JS, semantic structure, JSON-LD, sitemap.
 
-First, run the development server:
+## Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build && npm run start   # production
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+No environment variables required. The waitlist form writes to
+`.waitlist/leads.jsonl` (git-ignored) via `lib/waitlist.ts` — swap `saveLead()`
+for a POST to the Django backend when it's ready.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Next.js + TypeScript + Tailwind v4 (tokens in `app/globals.css` `@theme`),
+Framer Motion (scroll/entrance), React Three Fiber + drei (hero 3D knowledge
+graph only), Lenis (smooth scroll). No GSAP/Spline/Lottie by design.
 
-## Learn More
+## AEO/SEO guarantees (dog-fooding)
 
-To learn more about Next.js, take a look at the following resources:
+- `/` is statically generated; all copy readable with JavaScript disabled
+  (`<noscript>` override for reveal animations; native `<details>` FAQ).
+- JSON-LD: Organization, FAQPage (built from `lib/faq.ts` — the same data the
+  visible FAQ renders), SoftwareApplication.
+- Full meta: canonical, OpenGraph (+ code-generated `opengraph-image`), Twitter.
+- `sitemap.xml` + `robots.txt` via App Router conventions.
+- `prefers-reduced-motion`: 3D scene and all animations replaced with static
+  content; Lenis disabled. Mobile gets a light SVG graph instead of three.js.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Update `lib/site.ts` (SITE_URL) when the real domain is decided.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploy notes
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Any Node host or Vercel. `npm run build` produces the static page + the
+`/api/waitlist` route (needs a Node runtime, not pure static export).
