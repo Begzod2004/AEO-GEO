@@ -5,10 +5,15 @@ All environment-specific values are read from environment variables via
 ``django-environ``. No secrets are ever hardcoded here — see ``.env.example``
 for the full list of variables.
 """
+import sys
 from datetime import timedelta
 from pathlib import Path
 
 import environ
+
+# True while running the test suite (``manage.py test``). Used to keep tests
+# offline: local-memory cache instead of Redis, and Celery tasks run inline.
+TESTING = "test" in sys.argv
 
 # ---------------------------------------------------------------------------
 # Paths & environment
@@ -122,6 +127,10 @@ CACHES = {
     }
 }
 
+if TESTING:
+    # Keep the test suite offline and deterministic.
+    CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
+
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=REDIS_URL)
 CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default=REDIS_URL)
 CELERY_ACCEPT_CONTENT = ["json"]
@@ -129,7 +138,7 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "UTC"
 # In tests we run tasks inline so no worker/broker is required.
-CELERY_TASK_ALWAYS_EAGER = env.bool("CELERY_TASK_ALWAYS_EAGER", default=False)
+CELERY_TASK_ALWAYS_EAGER = env.bool("CELERY_TASK_ALWAYS_EAGER", default=TESTING)
 CELERY_TASK_EAGER_PROPAGATES = True
 
 # ---------------------------------------------------------------------------
@@ -172,6 +181,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Custom user: email is the login identifier, no per-user global role.
+AUTH_USER_MODEL = "accounts.User"
+
 # ---------------------------------------------------------------------------
 # Django REST Framework + JWT (wired fully in Stage 2)
 # ---------------------------------------------------------------------------
@@ -190,8 +202,10 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
-    "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
+    # Revocation is Redis-backed (see apps.accounts.tokens), not the DB
+    # blacklist app — so rotation/blacklist are handled manually.
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
 }
 
 # ---------------------------------------------------------------------------
