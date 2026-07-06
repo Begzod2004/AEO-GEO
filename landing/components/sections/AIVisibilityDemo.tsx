@@ -74,7 +74,8 @@ export function AIVisibilityDemo() {
   const typedAfter = full.slice(before.length + brand.length, chars);
 
   return (
-    <section id="demo" className="mx-auto max-w-6xl px-6 py-28">
+    <section id="demo" className="border-y border-line bg-surface/20">
+      <div className="mx-auto max-w-6xl px-6 py-28">
       <div className="text-center">
         <p className="eyebrow">See the difference</p>
         <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
@@ -157,6 +158,7 @@ export function AIVisibilityDemo() {
             AEO.GEO monitors what real assistants say about <em>your</em> brand.
           </p>
         </div>
+      </div>
       </div>
     </section>
   );

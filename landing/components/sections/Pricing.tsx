@@ -58,7 +58,15 @@ const PLANS: {
 
 export function Pricing() {
   return (
-    <section id="pricing" className="mx-auto max-w-6xl px-6 py-28">
+    <section id="pricing" className="relative mx-auto max-w-6xl px-6 py-28">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-1/3 -z-10 h-2/3 opacity-50"
+        style={{
+          background:
+            "radial-gradient(55% 60% at 50% 50%, rgba(99,102,241,0.12), transparent 70%)",
+        }}
+      />
       <Reveal>
         <p className="eyebrow text-center">Early access pricing</p>
         <h2 className="mt-4 text-center text-3xl font-semibold tracking-tight text-ink sm:text-4xl">

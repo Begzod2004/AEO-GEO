@@ -39,10 +39,20 @@ export function ScrollStory() {
   return (
     <section id="how-it-works" className="mx-auto max-w-3xl px-6 py-28">
       <Reveal>
-        <p className="eyebrow text-center">From invisible to recommended</p>
-        <h2 className="mt-4 text-center text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-          How your brand becomes <span className="text-gradient">AI-visible</span>
-        </h2>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="eyebrow">From invisible to recommended</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+              How your brand becomes{" "}
+              <span className="underline decoration-cyan/60 decoration-2 underline-offset-8">
+                AI-visible
+              </span>
+            </h2>
+          </div>
+          <p className="max-w-55 pb-1 text-sm leading-relaxed text-muted">
+            Six steps from a website AI skips to a brand AI recommends.
+          </p>
+        </div>
       </Reveal>
 
       <ol className="relative mt-16 space-y-14">
