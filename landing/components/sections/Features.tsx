@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/site/Reveal";
+import type { Dict } from "@/lib/i18n";
 
 /** Minimal stroke icons drawn for each capability — one visual family
  *  (24px grid, 1.5 stroke, rounded caps), tinted by the tile's cyan. */
@@ -46,59 +47,26 @@ const ICONS: Record<string, React.ReactNode> = {
   ),
 };
 
-const FEATURES: { icon: keyof typeof ICONS; title: string; body: string }[] = [
-  {
-    icon: "crawl",
-    title: "Crawl & Import",
-    body: "Connect your site and upload documents — pages, PDFs, product data become one knowledge source.",
-  },
-  {
-    icon: "kb",
-    title: "Knowledge Base",
-    body: "Your content is cleaned, chunked and embedded into a structured, queryable knowledge graph.",
-  },
-  {
-    icon: "schema",
-    title: "Schema Generation",
-    body: "FAQ, Organization and product schema.org markup generated from your real content — never invented.",
-  },
-  {
-    icon: "monitor",
-    title: "AI Monitoring",
-    body: "Real questions run against ChatGPT, Gemini, Claude and more — tracking mentions, sentiment and citations.",
-  },
-  {
-    icon: "scores",
-    title: "Visibility Scores",
-    body: "Six transparent 0-100 scores show exactly how AI sees your brand — and why.",
-  },
-  {
-    icon: "recs",
-    title: "AI Recommendations",
-    body: "Prioritized fixes that raise your scores: missing answers, weak structure, uncited claims.",
-  },
-];
-
-export function Features() {
+export function Features({ t }: { t: Dict["features"] }) {
   return (
     <section className="mx-auto max-w-6xl px-6 py-28">
       <Reveal>
         <div className="flex flex-col gap-4 border-b border-line pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="eyebrow">The toolkit</p>
+            <p className="eyebrow">{t.eyebrow}</p>
             <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-              Everything your brand needs to be{" "}
-              <span className="text-gradient">machine-understood</span>
+              {t.h2pre} <span className="text-gradient">{t.h2accent}</span>
+              {t.h2post && ` ${t.h2post}`}
             </h2>
           </div>
           <p className="max-w-55 pb-1 text-sm leading-relaxed text-muted">
-            One pipeline — from raw website to measured AI visibility.
+            {t.side}
           </p>
         </div>
       </Reveal>
 
       <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {FEATURES.map((f, i) => (
+        {t.items.map((f, i) => (
           <Reveal key={f.title} delay={Math.min(i * 0.06, 0.3)}>
             <article className="group h-full rounded-3xl border border-line bg-surface/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-indigo/40 hover:shadow-[0_20px_60px_-24px_rgba(99,102,241,0.5)]">
               <span

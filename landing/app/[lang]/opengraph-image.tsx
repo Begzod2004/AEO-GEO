@@ -1,13 +1,19 @@
 import { ImageResponse } from "next/og";
 
-import { SITE_DESCRIPTION } from "@/lib/site";
+import { getDict, type Locale } from "@/lib/i18n";
 
 export const alt = "AEO.GEO — Be understood by AI answer engines";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-/** Code-generated social share image — no binary asset to maintain. */
-export default function OgImage() {
+/** Code-generated social share image, localized per language. */
+export default async function OgImage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const d = getDict(lang as Locale);
   return new ImageResponse(
     (
       <div
@@ -30,18 +36,18 @@ export default function OgImage() {
           style={{
             display: "flex",
             marginTop: 28,
-            fontSize: 76,
+            fontSize: 72,
             fontWeight: 700,
             lineHeight: 1.05,
             letterSpacing: "-2px",
           }}
         >
-          Your Brand Deserves To Be
+          {d.hero.h1pre}
         </div>
         <div
           style={{
             display: "flex",
-            fontSize: 76,
+            fontSize: 72,
             fontWeight: 700,
             lineHeight: 1.05,
             letterSpacing: "-2px",
@@ -50,18 +56,18 @@ export default function OgImage() {
             color: "transparent",
           }}
         >
-          Understood By AI.
+          {d.hero.h1accent}
         </div>
         <div
           style={{
             display: "flex",
             marginTop: 32,
-            fontSize: 28,
+            fontSize: 27,
             color: "#94a3b8",
-            maxWidth: 900,
+            maxWidth: 950,
           }}
         >
-          {SITE_DESCRIPTION.split(".")[0] + "."}
+          {d.meta.description.split(/[.!]/)[0] + "."}
         </div>
       </div>
     ),

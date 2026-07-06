@@ -1,45 +1,50 @@
-/** schema.org JSON-LD — the product's own medicine on its own site.
- *  FAQPage is built from lib/faq.ts, the exact data rendered in the FAQ
- *  section, so markup and visible content can never drift apart. */
-import { FAQ } from "@/lib/faq";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+/** schema.org JSON-LD — the product's own medicine on its own site, per locale.
+ *  FAQPage is built from the SAME dictionary the visible FAQ renders, so markup
+ *  and visible content can never drift apart. */
+import type { Dict, Locale } from "@/lib/i18n";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
-const organization = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: SITE_NAME,
-  url: SITE_URL,
-  description: SITE_DESCRIPTION,
-  logo: `${SITE_URL}/favicon.svg`,
-};
+export function JsonLd({ dict, locale }: { dict: Dict; locale: Locale }) {
+  const pageUrl = `${SITE_URL}/${locale}`;
 
-const faqPage = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQ.map(({ q, a }) => ({
-    "@type": "Question",
-    name: q,
-    acceptedAnswer: { "@type": "Answer", text: a },
-  })),
-};
+  const organization = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: SITE_NAME,
+    url: SITE_URL,
+    description: dict.meta.description,
+    logo: `${SITE_URL}/favicon.svg`,
+  };
 
-const softwareApplication = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: SITE_NAME,
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web",
-  description: SITE_DESCRIPTION,
-  url: SITE_URL,
-  offers: {
-    "@type": "Offer",
-    price: "29",
-    priceCurrency: "USD",
-    description: "Early access pricing, from $29/month.",
-  },
-};
+  const faqPage = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    inLanguage: locale,
+    url: pageUrl,
+    mainEntity: dict.faq.items.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  };
 
-export function JsonLd() {
+  const softwareApplication = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: SITE_NAME,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    inLanguage: locale,
+    description: dict.meta.description,
+    url: pageUrl,
+    offers: {
+      "@type": "Offer",
+      price: "29",
+      priceCurrency: "USD",
+      description: "Early access pricing, from $29/month.",
+    },
+  };
+
   return (
     <>
       {[organization, faqPage, softwareApplication].map((schema, i) => (

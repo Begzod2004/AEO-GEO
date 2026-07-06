@@ -1,7 +1,8 @@
 import { EmailCapture } from "@/components/site/EmailCapture";
 import { Reveal } from "@/components/site/Reveal";
+import type { Dict } from "@/lib/i18n";
 
-export function FinalCta() {
+export function FinalCta({ t, email }: { t: Dict["finalCta"]; email: Dict["email"] }) {
   return (
     <section id="early-access" className="relative overflow-hidden">
       <div
@@ -15,14 +16,11 @@ export function FinalCta() {
       <div className="relative mx-auto max-w-3xl px-6 py-32 text-center">
         <Reveal>
           <h2 className="text-[clamp(2rem,5vw,3.4rem)] font-semibold leading-[1.06] tracking-[-0.03em] text-ink">
-            Be visible when <span className="text-gradient">AI answers.</span>
+            {t.h2pre} <span className="text-gradient">{t.h2accent}</span>
           </h2>
-          <p className="mx-auto mt-5 max-w-lg text-lg text-muted">
-            Join the early-access list — founding members get onboarding first
-            and keep launch pricing.
-          </p>
+          <p className="mx-auto mt-5 max-w-lg text-lg text-muted">{t.sub}</p>
           <div className="mt-9 flex justify-center">
-            <EmailCapture className="w-full max-w-md" />
+            <EmailCapture t={email} className="w-full max-w-md" />
           </div>
         </Reveal>
       </div>

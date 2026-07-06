@@ -2,10 +2,18 @@
 
 import { useId, useState } from "react";
 
+import type { Dict } from "@/lib/i18n";
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 type State = "idle" | "loading" | "done" | "error";
 
-export function EmailCapture({ className = "" }: { className?: string }) {
+export function EmailCapture({
+  t,
+  className = "",
+}: {
+  t: Dict["email"];
+  className?: string;
+}) {
   const [email, setEmail] = useState("");
   const [state, setState] = useState<State>("idle");
   const [error, setError] = useState("");
@@ -15,7 +23,7 @@ export function EmailCapture({ className = "" }: { className?: string }) {
     e.preventDefault();
     const value = email.trim();
     if (!EMAIL_RE.test(value)) {
-      setError("Enter a valid email address.");
+      setError(t.invalid);
       setState("error");
       return;
     }
@@ -27,13 +35,10 @@ export function EmailCapture({ className = "" }: { className?: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: value }),
       });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Something went wrong. Try again.");
-      }
+      if (!res.ok) throw new Error(t.generic);
       setState("done");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(err instanceof Error ? err.message : t.generic);
       setState("error");
     }
   }
@@ -43,7 +48,7 @@ export function EmailCapture({ className = "" }: { className?: string }) {
       <p
         className={`inline-flex items-center gap-2 rounded-full border border-cyan/40 bg-cyan/10 px-5 py-3 text-sm font-medium text-ink ${className}`}
       >
-        <span className="text-cyan">✓</span> You&apos;re on the list — we&apos;ll be in touch.
+        <span className="text-cyan">✓</span> {t.success}
       </p>
     );
   }
@@ -52,14 +57,14 @@ export function EmailCapture({ className = "" }: { className?: string }) {
     <form onSubmit={onSubmit} noValidate className={className}>
       <div className="flex w-full max-w-md items-center gap-2 rounded-full border border-line bg-surface/60 p-1.5 pl-4 focus-within:border-indigo/60">
         <label htmlFor={inputId} className="sr-only">
-          Work email
+          {t.srLabel}
         </label>
         <input
           id={inputId}
           type="email"
           inputMode="email"
           autoComplete="email"
-          placeholder="you@company.com"
+          placeholder={t.placeholder}
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
@@ -72,7 +77,7 @@ export function EmailCapture({ className = "" }: { className?: string }) {
           disabled={state === "loading"}
           className="ml-auto shrink-0 rounded-full bg-linear-to-r from-indigo to-cyan px-5 py-2 text-sm font-semibold text-base transition-transform hover:scale-[1.03] disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
         >
-          {state === "loading" ? "Joining…" : "Get Early Access"}
+          {state === "loading" ? t.joining : t.button}
         </button>
       </div>
       {state === "error" && (

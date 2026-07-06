@@ -11,13 +11,19 @@ const nodes = ENGINES.map((label, i) => {
   return { label, x: CX + R * Math.cos(a), y: CY + R * Math.sin(a) };
 });
 
-export function StaticGraph() {
+export function StaticGraph({
+  brandLabel = "Your Brand",
+  ariaLabel = "AEO.GEO connects your brand to AI answer engines: ChatGPT, Gemini, Claude, Perplexity and Copilot.",
+}: {
+  brandLabel?: string;
+  ariaLabel?: string;
+}) {
   return (
     <svg
       viewBox="0 0 400 400"
       className="h-full w-full"
       role="img"
-      aria-label="AEO.GEO connects your brand to AI answer engines: ChatGPT, Gemini, Claude, Perplexity and Copilot."
+      aria-label={ariaLabel}
     >
       <defs>
         <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
@@ -65,10 +71,10 @@ export function StaticGraph() {
         y={CY + 4}
         textAnchor="middle"
         className="fill-white font-sans"
-        fontSize={12}
+        fontSize={11}
         fontWeight={600}
       >
-        Your Brand
+        {brandLabel}
       </text>
     </svg>
   );

@@ -3,15 +3,7 @@
 import { useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const LINES = [
-  "Analyzing website...",
-  "Building Knowledge Graph...",
-  "Generating FAQ & Schema...",
-  "Monitoring AI answers...",
-  "Done. Your brand is AI-visible.",
-];
-
-export function TypingTerminal() {
+export function TypingTerminal({ lines: LINES }: { lines: string[] }) {
   const reduced = useReducedMotion();
   const [line, setLine] = useState(0);
   const [chars, setChars] = useState(0);
@@ -34,7 +26,7 @@ export function TypingTerminal() {
       }, 2800);
     }
     return () => clearTimeout(timer);
-  }, [line, chars, reduced]);
+  }, [line, chars, reduced, LINES]);
 
   const shown = reduced ? LINES : LINES.slice(0, line + 1);
 

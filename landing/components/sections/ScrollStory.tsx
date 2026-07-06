@@ -1,56 +1,25 @@
 import { Reveal } from "@/components/site/Reveal";
+import type { Dict } from "@/lib/i18n";
 
 /** Problem → solution narrative. A real sequence, so numbered steps carry
  *  information here. Pure HTML/SVG — no 3D. */
-const STEPS: { title: string; body: string; tone: "problem" | "solution" }[] = [
-  {
-    title: "You have a website.",
-    body: "Years of pages, products and expertise — written for people and Google.",
-    tone: "problem",
-  },
-  {
-    title: "AI doesn't understand it.",
-    body: "Answer engines see scattered, unstructured text. So they guess — or skip you.",
-    tone: "problem",
-  },
-  {
-    title: "We crawl it.",
-    body: "AEO.GEO imports your site and documents: pages, PDFs, product data.",
-    tone: "solution",
-  },
-  {
-    title: "We build your Knowledge Graph.",
-    body: "Your content becomes clean, structured, machine-readable knowledge.",
-    tone: "solution",
-  },
-  {
-    title: "We optimize everything.",
-    body: "FAQ, schema.org markup, structure — the language AI engines actually read.",
-    tone: "solution",
-  },
-  {
-    title: "AI starts recommending your brand.",
-    body: "You're described accurately, cited as a source, and suggested in answers.",
-    tone: "solution",
-  },
-];
-
-export function ScrollStory() {
+export function ScrollStory({ t }: { t: Dict["story"] }) {
   return (
     <section id="how-it-works" className="mx-auto max-w-3xl px-6 py-28">
       <Reveal>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="eyebrow">From invisible to recommended</p>
+            <p className="eyebrow">{t.eyebrow}</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-              How your brand becomes{" "}
+              {t.h2pre}{" "}
               <span className="underline decoration-cyan/60 decoration-2 underline-offset-8">
-                AI-visible
+                {t.h2accent}
               </span>
+              {t.h2post && ` ${t.h2post}`}
             </h2>
           </div>
           <p className="max-w-55 pb-1 text-sm leading-relaxed text-muted">
-            Six steps from a website AI skips to a brand AI recommends.
+            {t.side}
           </p>
         </div>
       </Reveal>
@@ -61,7 +30,7 @@ export function ScrollStory() {
           aria-hidden
           className="absolute top-2 bottom-2 left-[15px] w-px bg-linear-to-b from-indigo/60 via-cyan/40 to-cyan/70"
         />
-        {STEPS.map((step, i) => (
+        {t.steps.map((step, i) => (
           <li key={step.title} className="relative pl-14">
             <Reveal delay={Math.min(i * 0.07, 0.28)}>
               <span

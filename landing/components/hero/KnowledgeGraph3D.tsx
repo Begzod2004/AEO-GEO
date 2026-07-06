@@ -162,7 +162,7 @@ function Node({
   );
 }
 
-function Scene() {
+function Scene({ brandLabel }: { brandLabel: string }) {
   const group = useRef<THREE.Group>(null);
   const nodes = useNodes();
   useFrame((state) => {
@@ -190,7 +190,7 @@ function Scene() {
           <Pulse to={n.pos} offset={i / ENGINES.length} />
         </group>
       ))}
-      <Node pos={CENTER} label="Your Brand" primary />
+      <Node pos={CENTER} label={brandLabel} primary />
       {nodes.map((n) => (
         <Node key={n.label} pos={n.pos} label={n.label} />
       ))}
@@ -198,7 +198,11 @@ function Scene() {
   );
 }
 
-export default function KnowledgeGraph3D() {
+export default function KnowledgeGraph3D({
+  brandLabel = "Your Brand",
+}: {
+  brandLabel?: string;
+}) {
   return (
     <Canvas
       camera={{ position: [0, 0, 6.9], fov: 45 }}
@@ -209,7 +213,7 @@ export default function KnowledgeGraph3D() {
       <ambientLight intensity={0.7} />
       <pointLight position={[5, 4, 6]} intensity={44} color="#22d3ee" />
       <pointLight position={[-5, -3, 4]} intensity={30} color="#6366f1" />
-      <Scene />
+      <Scene brandLabel={brandLabel} />
     </Canvas>
   );
 }

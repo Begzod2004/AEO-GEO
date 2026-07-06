@@ -21,7 +21,13 @@ function GraphSkeleton() {
   );
 }
 
-export function GraphVisual() {
+export function GraphVisual({
+  brandLabel,
+  ariaLabel,
+}: {
+  brandLabel: string;
+  ariaLabel: string;
+}) {
   const reduced = useReducedMotion();
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
@@ -34,6 +40,7 @@ export function GraphVisual() {
   }, []);
 
   // SSR / unknown / mobile / reduced-motion → the light static SVG graph.
-  if (isMobile === null || isMobile || reduced) return <StaticGraph />;
-  return <KnowledgeGraph3D />;
+  if (isMobile === null || isMobile || reduced)
+    return <StaticGraph brandLabel={brandLabel} ariaLabel={ariaLabel} />;
+  return <KnowledgeGraph3D brandLabel={brandLabel} />;
 }

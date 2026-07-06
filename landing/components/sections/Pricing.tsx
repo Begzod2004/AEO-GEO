@@ -1,62 +1,7 @@
 import { Reveal } from "@/components/site/Reveal";
+import type { Dict } from "@/lib/i18n";
 
-const PLANS: {
-  name: string;
-  price: string;
-  cadence: string;
-  features: string[];
-  featured?: boolean;
-}[] = [
-  {
-    name: "Starter",
-    price: "$29",
-    cadence: "/mo",
-    features: [
-      "1 organization, 1 domain",
-      "Monthly AI visibility scans",
-      "Knowledge base up to 100 pages",
-      "FAQ & Organization schema",
-    ],
-  },
-  {
-    name: "Pro",
-    price: "$79",
-    cadence: "/mo",
-    featured: true,
-    features: [
-      "3 domains, 5 team members",
-      "Weekly scans across all engines",
-      "Full schema suite + auto-updates",
-      "Score history & trend analytics",
-      "Priority support",
-    ],
-  },
-  {
-    name: "Business",
-    price: "$199",
-    cadence: "/mo",
-    features: [
-      "10 domains, unlimited team",
-      "Daily scans + alerts",
-      "API access",
-      "Competitor snapshots",
-      "Onboarding assistance",
-    ],
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    cadence: "",
-    features: [
-      "Unlimited domains & workspaces",
-      "Custom scan frequency & SLAs",
-      "White-label & agency tooling",
-      "Dedicated success manager",
-    ],
-  },
-];
-
-export function Pricing() {
+export function Pricing({ t }: { t: Dict["pricing"] }) {
   return (
     <section id="pricing" className="relative mx-auto max-w-6xl px-6 py-28">
       <div
@@ -68,17 +13,16 @@ export function Pricing() {
         }}
       />
       <Reveal>
-        <p className="eyebrow text-center">Early access pricing</p>
+        <p className="eyebrow text-center">{t.eyebrow}</p>
         <h2 className="mt-4 text-center text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-          Founding-member <span className="text-gradient">pricing</span>
+          {t.h2pre} <span className="text-gradient">{t.h2accent}</span>
+          {t.h2post && ` ${t.h2post}`}
         </h2>
-        <p className="mx-auto mt-4 max-w-xl text-center text-muted">
-          Lock in early-access rates before public launch. Cancel anytime.
-        </p>
+        <p className="mx-auto mt-4 max-w-xl text-center text-muted">{t.sub}</p>
       </Reveal>
 
       <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-        {PLANS.map((plan, i) => (
+        {t.plans.map((plan, i) => (
           <Reveal key={plan.name} delay={Math.min(i * 0.06, 0.24)}>
             <article
               className={`relative h-full rounded-3xl border p-6 transition-all duration-300 hover:-translate-y-1 ${
@@ -89,7 +33,7 @@ export function Pricing() {
             >
               {plan.featured && (
                 <span className="absolute -top-3 left-6 rounded-full bg-linear-to-r from-indigo to-cyan px-3 py-1 font-mono text-[10px] font-bold tracking-wider text-base uppercase">
-                  Most popular
+                  {t.popular}
                 </span>
               )}
               <h3 className="text-lg font-semibold text-ink">{plan.name}</h3>
@@ -117,16 +61,14 @@ export function Pricing() {
                     : "border border-line text-ink hover:bg-surface"
                 }`}
               >
-                Get Early Access
+                {t.cta}
               </a>
             </article>
           </Reveal>
         ))}
       </div>
 
-      <p className="mt-8 text-center text-xs text-muted">
-        Early-access prices are placeholders and may change before public launch.
-      </p>
+      <p className="mt-8 text-center text-xs text-muted">{t.note}</p>
     </section>
   );
 }
