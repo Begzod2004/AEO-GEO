@@ -12,7 +12,13 @@ redis>=5.0,<6.0
 
 # --- Data stores ---
 psycopg[binary]>=3.1,<4.0
-qdrant-client>=1.9,<2.0
+qdrant-client>=1.12,<2.0
+
+# --- Knowledge Base (Stage 4): extraction + embeddings ---
+pdfplumber>=0.11,<1.0
+python-docx>=1.1,<2.0
+trafilatura>=1.8,<3.0
+openai>=1.30,<2.0   # only used in live embedding mode
 
 # --- HTTP / serving ---
 requests>=2.31,<3.0
