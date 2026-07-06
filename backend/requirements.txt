@@ -1,0 +1,22 @@
+# --- Core framework ---
+Django>=5.0,<5.3
+djangorestframework>=3.15,<3.17
+djangorestframework-simplejwt>=5.3,<6.0
+django-cors-headers>=4.3,<5.0
+django-environ>=0.11,<1.0
+drf-nested-routers>=0.93,<1.0
+
+# --- Async / periodic tasks ---
+celery>=5.4,<6.0
+redis>=5.0,<6.0
+
+# --- Data stores ---
+psycopg[binary]>=3.1,<4.0
+qdrant-client>=1.9,<2.0
+
+# --- HTTP / serving ---
+requests>=2.31,<3.0
+gunicorn>=22.0,<24.0
+
+# NOTE: stage-specific dependencies (crawling, document parsing, AI SDKs)
+# are added to this file in their respective build stage.

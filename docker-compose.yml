@@ -1,0 +1,98 @@
+# AEO.GEO — local development stack.
+#
+# `docker compose up` brings up the full backend: Postgres, Redis, Qdrant,
+# the Django web server, a Celery worker and a Celery beat scheduler.
+# Frontend is added in Stage 8.
+#
+# Secrets/keys are read from a local `.env` file (git-ignored) via interpolation.
+# With no `.env` present, every AI key defaults to empty and the platform runs
+# in mock mode (see docs/adr/001-mock-mode.md).
+
+x-backend-env: &backend-env
+  DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-dev-insecure-change-me}
+  DJANGO_DEBUG: ${DJANGO_DEBUG:-true}
+  DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-*}
+  POSTGRES_URL: postgres://aeo:aeo@postgres:5432/aeo
+  REDIS_URL: redis://redis:6379/0
+  QDRANT_URL: http://qdrant:6333
+  AEO_MODE: ${AEO_MODE:-auto}
+  OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+  GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
+  STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+
+x-backend-base: &backend-base
+  build: ./backend
+  image: aeo-geo-backend:dev
+  environment: *backend-env
+  volumes:
+    - ./backend:/app
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+    qdrant:
+      condition: service_started
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: aeo
+      POSTGRES_USER: aeo
+      POSTGRES_PASSWORD: aeo
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # Not published to the host — the backend reaches it internally as
+    # `postgres:5432`. To inspect from the host, add a `ports:` mapping or use
+    # `docker compose exec postgres psql -U aeo aeo`.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aeo -d aeo"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    # Not published to the host (internal only) to avoid port clashes.
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    volumes:
+      - qdrant_data:/qdrant/storage
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+
+  backend:
+    <<: *backend-base
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  celery-worker:
+    <<: *backend-base
+    command: celery -A config worker -l info
+    ports: []
+
+  celery-beat:
+    <<: *backend-base
+    command: celery -A config beat -l info
+    ports: []
+
+volumes:
+  postgres_data:
+  qdrant_data:
