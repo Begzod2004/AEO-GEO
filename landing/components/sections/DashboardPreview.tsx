@@ -35,7 +35,6 @@ export function DashboardPreview({ t }: { t: Dict["dash"] }) {
   return (
     <section className="mx-auto max-w-6xl px-6 py-28">
       <Reveal>
-        <p className="eyebrow text-center">{t.eyebrow}</p>
         <h2 className="mt-4 text-center text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
           {t.h2pre} <span className="text-gradient">{t.h2accent}</span>
           {t.h2post && ` ${t.h2post}`}

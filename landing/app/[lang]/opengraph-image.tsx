@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 import { getDict, type Locale } from "@/lib/i18n";
 
-export const alt = "AEO.GEO — Be understood by AI answer engines";
+export const alt = "AEO.GEO - Be understood by AI answer engines";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

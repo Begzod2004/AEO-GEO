@@ -53,7 +53,6 @@ export function Features({ t }: { t: Dict["features"] }) {
       <Reveal>
         <div className="flex flex-col gap-4 border-b border-line pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="eyebrow">{t.eyebrow}</p>
             <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
               {t.h2pre} <span className="text-gradient">{t.h2accent}</span>
               {t.h2post && ` ${t.h2post}`}

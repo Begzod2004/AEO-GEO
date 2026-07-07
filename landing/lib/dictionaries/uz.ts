@@ -3,7 +3,7 @@ import type { Dict } from "../i18n";
 /** O'zbekcha (lotin) versiya. */
 export const uz: Dict = {
   meta: {
-    title: "AEO.GEO — AI-assistentlarga tushunarli bo'ling",
+    title: "AEO.GEO - AI-assistentlarga tushunarli bo'ling",
     description:
       "Biznesingizni ChatGPT, Gemini, Claude, Perplexity va yangi avlod AI qidiruvi uchun optimallashtiring. AI javoblari brendingiz haqida nima deyishini skanerlang, strukturalang va kuzating.",
   },
@@ -20,7 +20,7 @@ export const uz: Dict = {
     eyebrow: "AI javob tizimlari uchun optimizatsiya",
     h1pre: "Brendingiz AI tomonidan",
     h1accent: "tushunilishga loyiq.",
-    sub: "Biznesingizni ChatGPT, Gemini, Claude, Perplexity va yangi avlod AI qidiruvi uchun optimallashtiring — javob tizimlari sizni to'g'ri tasvirlab, tez-tez tavsiya qilsin.",
+    sub: "Biznesingizni ChatGPT, Gemini, Claude, Perplexity va yangi avlod AI qidiruvi uchun optimallashtiring - javob tizimlari sizni to'g'ri tasvirlab, tez-tez tavsiya qilsin.",
     seeHow: "Qanday ishlaydi",
     terminal: [
       "Sayt tahlil qilinmoqda...",
@@ -37,7 +37,7 @@ export const uz: Dict = {
     placeholder: "siz@kompaniya.uz",
     button: "Erta kirish",
     joining: "Yuborilmoqda…",
-    success: "Ro'yxatdasiz — tez orada bog'lanamiz.",
+    success: "Ro'yxatdasiz - tez orada bog'lanamiz.",
     invalid: "To'g'ri email kiriting.",
     generic: "Xatolik yuz berdi. Qayta urinib ko'ring.",
     srLabel: "Ish email manzili",
@@ -52,12 +52,12 @@ export const uz: Dict = {
     steps: [
       {
         title: "Saytingiz bor.",
-        body: "Yillar davomida yozilgan sahifalar, mahsulotlar va tajriba — odamlar va Google uchun.",
+        body: "Yillar davomida yozilgan sahifalar, mahsulotlar va tajriba - odamlar va Google uchun.",
         tone: "problem",
       },
       {
         title: "AI uni tushunmaydi.",
-        body: "Javob tizimlari tarqoq, strukturasiz matnni ko'radi. Shuning uchun taxmin qiladi — yoki sizni o'tkazib yuboradi.",
+        body: "Javob tizimlari tarqoq, strukturasiz matnni ko'radi. Shuning uchun taxmin qiladi - yoki sizni o'tkazib yuboradi.",
         tone: "problem",
       },
       {
@@ -72,7 +72,7 @@ export const uz: Dict = {
       },
       {
         title: "Hammasini optimallashtiramiz.",
-        body: "FAQ, schema.org razmetkasi, struktura — AI haqiqatan o'qiydigan til.",
+        body: "FAQ, schema.org razmetkasi, struktura - AI haqiqatan o'qiydigan til.",
         tone: "solution",
       },
       {
@@ -87,21 +87,21 @@ export const uz: Dict = {
     h2pre: "Brendingiz",
     h2accent: "strukturalangan",
     h2post: "bo'lsa, AI nima deydi",
-    sub: "Odamlar AI-assistentlardan haqiqatan so'raydigan savolni tanlang — AI'ga ko'rinadigan brend javobda qanday chiqishini ko'ring.",
+    sub: "Odamlar AI-assistentlardan haqiqatan so'raydigan savolni tanlang - AI'ga ko'rinadigan brend javobda qanday chiqishini ko'ring.",
     questionLabel: "Savol",
     presetLabel: "Tayyor savollar",
     assistant: "AI-assistent",
     badge: "✓ AEO.GEO bilan AI'ga ko'rinadi",
     tag: "Interaktiv demo",
     disclaimer:
-      "Bu — to'qima brend bilan skriptlangan misol, jonli AI javobi emas. AEO.GEO real assistentlar sizning brendingiz haqida nima deyishini kuzatadi.",
+      "Bu - to'qima brend bilan skriptlangan misol, jonli AI javobi emas. AEO.GEO real assistentlar sizning brendingiz haqida nima deyishini kuzatadi.",
     presets: [
       {
         chip: "Eng yaxshi logistika kompaniyasi",
         question:
           "Mintaqaviy yetkazib berish uchun eng yaxshi logistika kompaniyasi qaysi?",
         answer: [
-          "Real vaqtda kuzatuv bilan mintaqaviy yetkazib berish uchun kuchli variant — ",
+          "Real vaqtda kuzatuv bilan mintaqaviy yetkazib berish uchun kuchli variant - ",
           "NorthTrail Logistics",
           ": ular qamrov, narx va SLA ma'lumotlarini AI tekshira oladigan tarzda aniq e'lon qiladi, mijoz sharhlarida esa o'z vaqtida yetkazish doim tilga olinadi.",
         ] as [string, string, string],
@@ -119,7 +119,7 @@ export const uz: Dict = {
         chip: "Qurilish uchun eng yaxshi CRM",
         question: "Qurilish biznesi uchun qaysi CRM yaxshi?",
         answer: [
-          "Qurilish jamoalari uchun tez-tez tavsiya qilinadigan tanlov — ",
+          "Qurilish jamoalari uchun tez-tez tavsiya qilinadigan tanlov - ",
           "BuildFlow CRM",
           ": sayti loyiha oqimlari, integratsiyalar va tarif rejalarini aniq tasvirlaydi, shuning uchun AI-assistentlar uning imkoniyatlarini to'g'ri xulosalay oladi.",
         ] as [string, string, string],
@@ -131,12 +131,12 @@ export const uz: Dict = {
     h2pre: "Brendingiz",
     h2accent: "mashina tushunadigan",
     h2post: "bo'lishi uchun kerak bo'lgan hammasi",
-    side: "Bitta quvur — xom saytdan o'lchanadigan AI-ko'rinuvchanlikkacha.",
+    side: "Bitta quvur - xom saytdan o'lchanadigan AI-ko'rinuvchanlikkacha.",
     items: [
       {
         icon: "crawl",
         title: "Skanerlash va import",
-        body: "Saytingizni ulang, hujjatlarni yuklang — sahifalar, PDF va mahsulot ma'lumotlari yagona bilim manbasiga aylanadi.",
+        body: "Saytingizni ulang, hujjatlarni yuklang - sahifalar, PDF va mahsulot ma'lumotlari yagona bilim manbasiga aylanadi.",
       },
       {
         icon: "kb",
@@ -146,17 +146,17 @@ export const uz: Dict = {
       {
         icon: "schema",
         title: "Schema generatsiyasi",
-        body: "FAQ, Organization va mahsulot schema.org razmetkasi real kontentingizdan yaratiladi — hech narsa to'qilmaydi.",
+        body: "FAQ, Organization va mahsulot schema.org razmetkasi real kontentingizdan yaratiladi - hech narsa to'qilmaydi.",
       },
       {
         icon: "monitor",
         title: "AI monitoring",
-        body: "ChatGPT, Gemini, Claude va boshqalarga real savollar — eslatmalar, ohang va iqtiboslar kuzatiladi.",
+        body: "ChatGPT, Gemini, Claude va boshqalarga real savollar - eslatmalar, ohang va iqtiboslar kuzatiladi.",
       },
       {
         icon: "scores",
         title: "Ko'rinuvchanlik ballari",
-        body: "Oltita shaffof 0–100 ball AI brendingizni qanday ko'rishini — va nima uchunligini aniq ko'rsatadi.",
+        body: "Oltita shaffof 0–100 ball AI brendingizni qanday ko'rishini - va nima uchunligini aniq ko'rsatadi.",
       },
       {
         icon: "recs",
@@ -170,7 +170,7 @@ export const uz: Dict = {
     h2pre: "AI'dagi mavjudligingiz,",
     h2accent: "o'lchangan",
     h2post: "",
-    sub: "Real skanerlashlar yangilab turadigan oltita shaffof ball — javob tizimlari sizni qanday ko'rishini doim bilasiz.",
+    sub: "Real skanerlashlar yangilab turadigan oltita shaffof ball - javob tizimlari sizni qanday ko'rishini doim bilasiz.",
     scoreLabels: ["AI ko'rinuvchanlik", "GEO", "AEO", "SEO", "Ishonch", "Iqtibos"],
     trendLabel: "AI ko'rinuvchanlik · so'nggi 12 skan",
     trendUp: "▲ o'sishda",
@@ -255,7 +255,7 @@ export const uz: Dict = {
     items: [
       {
         q: "AEO/GEO nima?",
-        a: "AEO (Answer Engine Optimization) va GEO (Generative Engine Optimization) — biznesingizni ChatGPT, Gemini, Claude va Perplexity kabi AI-assistentlar topadigan, to'g'ri tasvirlaydigan va tavsiya qiladigan qilish amaliyoti — xuddi SEO buni Google uchun qilgani kabi.",
+        a: "AEO (Answer Engine Optimization) va GEO (Generative Engine Optimization) - biznesingizni ChatGPT, Gemini, Claude va Perplexity kabi AI-assistentlar topadigan, to'g'ri tasvirlaydigan va tavsiya qiladigan qilish amaliyoti - xuddi SEO buni Google uchun qilgani kabi.",
       },
       {
         q: "SEO'dan farqi nimada?",
@@ -263,11 +263,11 @@ export const uz: Dict = {
       },
       {
         q: "Qaysi AI platformalarni kuzatasiz?",
-        a: "AEO.GEO asosiy AI javob tizimlarini kuzatish uchun qurilgan: ChatGPT, Gemini, Claude, Perplexity, Copilot va Google AI Overview — ro'yxat kengayib bormoqda. Monitoring har bir platformaga real savollar yuboradi va brendingiz javoblarda qanday ko'rinishini tahlil qiladi.",
+        a: "AEO.GEO asosiy AI javob tizimlarini kuzatish uchun qurilgan: ChatGPT, Gemini, Claude, Perplexity, Copilot va Google AI Overview - ro'yxat kengayib bormoqda. Monitoring har bir platformaga real savollar yuboradi va brendingiz javoblarda qanday ko'rinishini tahlil qiladi.",
       },
       {
         q: "AI ko'rinuvchanlikni qanday o'lchaysiz?",
-        a: "Biz AI platformalarga muntazam ravishda real mijoz savollarini yuboramiz va javoblarni tahlil qilamiz: siz tilga olinganmisiz, qanday ohangda va qaysi manbalar iqtibos qilingan. Natijalar oltita shaffof 0–100 ballga jamlanadi — AI ko'rinuvchanlik, GEO, AEO, SEO, Ishonch va Iqtibos — formulalarini tekshirishingiz mumkin.",
+        a: "Biz AI platformalarga muntazam ravishda real mijoz savollarini yuboramiz va javoblarni tahlil qilamiz: siz tilga olinganmisiz, qanday ohangda va qaysi manbalar iqtibos qilingan. Natijalar oltita shaffof 0–100 ballga jamlanadi - AI ko'rinuvchanlik, GEO, AEO, SEO, Ishonch va Iqtibos - formulalarini tekshirishingiz mumkin.",
       },
       {
         q: "Texnik bilim kerakmi?",
@@ -275,14 +275,14 @@ export const uz: Dict = {
       },
       {
         q: "Qachon ishga tushadi?",
-        a: "AEO.GEO faol ishlab chiqilmoqda, erta kirish dasturi davom etmoqda. Kutish ro'yxatiga qo'shiling — joylar ochilishi bilan taklif qilamiz; erta a'zolar asoschi narxlarini oladi.",
+        a: "AEO.GEO faol ishlab chiqilmoqda, erta kirish dasturi davom etmoqda. Kutish ro'yxatiga qo'shiling - joylar ochilishi bilan taklif qilamiz; erta a'zolar asoschi narxlarini oladi.",
       },
     ],
   },
   finalCta: {
     h2pre: "AI javob berganda",
     h2accent: "ko'rinib turing.",
-    sub: "Erta kirish ro'yxatiga qo'shiling — asoschi a'zolar onboardingni birinchi bo'lib oladi va boshlang'ich narxlarni saqlab qoladi.",
+    sub: "Erta kirish ro'yxatiga qo'shiling - asoschi a'zolar onboardingni birinchi bo'lib oladi va boshlang'ich narxlarni saqlab qoladi.",
   },
   footer: {
     tagline: "Brendingizni AI-assistentlarga tushunarli qiling.",

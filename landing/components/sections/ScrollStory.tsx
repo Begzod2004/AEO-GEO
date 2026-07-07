@@ -9,7 +9,6 @@ export function ScrollStory({ t }: { t: Dict["story"] }) {
       <Reveal>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="eyebrow">{t.eyebrow}</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
               {t.h2pre}{" "}
               <span className="underline decoration-cyan/60 decoration-2 underline-offset-8">

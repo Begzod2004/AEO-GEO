@@ -1,7 +1,7 @@
-/** English copy — the source of truth for the Dict shape. */
+/** English copy - the source of truth for the Dict shape. */
 export const en = {
   meta: {
-    title: "AEO.GEO — Be understood by AI answer engines",
+    title: "AEO.GEO - Be understood by AI answer engines",
     description:
       "Optimize your business for ChatGPT, Gemini, Claude, Perplexity and the next generation of AI search. Crawl, structure and monitor how AI answers talk about your brand.",
   },
@@ -18,7 +18,7 @@ export const en = {
     eyebrow: "AI answer engine optimization",
     h1pre: "Your Brand Deserves To Be",
     h1accent: "Understood By AI.",
-    sub: "Optimize your business for ChatGPT, Gemini, Claude, Perplexity and the next generation of AI search — so the answer engines describe you accurately and recommend you often.",
+    sub: "Optimize your business for ChatGPT, Gemini, Claude, Perplexity and the next generation of AI search - so the answer engines describe you accurately and recommend you often.",
     seeHow: "See how it works",
     terminal: [
       "Analyzing website...",
@@ -35,7 +35,7 @@ export const en = {
     placeholder: "you@company.com",
     button: "Get Early Access",
     joining: "Joining…",
-    success: "You're on the list — we'll be in touch.",
+    success: "You're on the list - we'll be in touch.",
     invalid: "Enter a valid email address.",
     generic: "Something went wrong. Try again.",
     srLabel: "Work email",
@@ -50,12 +50,12 @@ export const en = {
     steps: [
       {
         title: "You have a website.",
-        body: "Years of pages, products and expertise — written for people and Google.",
+        body: "Years of pages, products and expertise - written for people and Google.",
         tone: "problem",
       },
       {
         title: "AI doesn't understand it.",
-        body: "Answer engines see scattered, unstructured text. So they guess — or skip you.",
+        body: "Answer engines see scattered, unstructured text. So they guess - or skip you.",
         tone: "problem",
       },
       {
@@ -70,7 +70,7 @@ export const en = {
       },
       {
         title: "We optimize everything.",
-        body: "FAQ, schema.org markup, structure — the language AI engines actually read.",
+        body: "FAQ, schema.org markup, structure - the language AI engines actually read.",
         tone: "solution",
       },
       {
@@ -85,14 +85,14 @@ export const en = {
     h2pre: "What AI says when your brand is",
     h2accent: "structured",
     h2post: "",
-    sub: "Pick a question people actually ask AI assistants — and see how an AI-visible brand shows up in the answer.",
+    sub: "Pick a question people actually ask AI assistants - and see how an AI-visible brand shows up in the answer.",
     questionLabel: "The question",
     presetLabel: "Try a preset",
     assistant: "AI assistant",
     badge: "✓ AI-visible with AEO.GEO",
     tag: "Interactive demo",
     disclaimer:
-      "Scripted example with a fictional brand — not a live AI response. AEO.GEO monitors what real assistants say about your brand.",
+      "Scripted example with a fictional brand - not a live AI response. AEO.GEO monitors what real assistants say about your brand.",
     presets: [
       {
         chip: "Best logistics company",
@@ -100,7 +100,7 @@ export const en = {
         answer: [
           "For regional delivery with real-time tracking, a strong option is ",
           "NorthTrail Logistics",
-          " — they publish clear coverage, pricing and SLA data that AI systems can verify, and customer reviews consistently mention on-time delivery.",
+          " - they publish clear coverage, pricing and SLA data that AI systems can verify, and customer reviews consistently mention on-time delivery.",
         ] as [string, string, string],
       },
       {
@@ -118,7 +118,7 @@ export const en = {
         answer: [
           "A frequently recommended choice for construction teams is ",
           "BuildFlow CRM",
-          " — its site clearly describes project pipelines, integrations and pricing tiers, which makes its capabilities easy for AI assistants to summarize accurately.",
+          " - its site clearly describes project pipelines, integrations and pricing tiers, which makes its capabilities easy for AI assistants to summarize accurately.",
         ] as [string, string, string],
       },
     ],
@@ -128,12 +128,12 @@ export const en = {
     h2pre: "Everything your brand needs to be",
     h2accent: "machine-understood",
     h2post: "",
-    side: "One pipeline — from raw website to measured AI visibility.",
+    side: "One pipeline - from raw website to measured AI visibility.",
     items: [
       {
         icon: "crawl",
         title: "Crawl & Import",
-        body: "Connect your site and upload documents — pages, PDFs, product data become one knowledge source.",
+        body: "Connect your site and upload documents - pages, PDFs, product data become one knowledge source.",
       },
       {
         icon: "kb",
@@ -143,17 +143,17 @@ export const en = {
       {
         icon: "schema",
         title: "Schema Generation",
-        body: "FAQ, Organization and product schema.org markup generated from your real content — never invented.",
+        body: "FAQ, Organization and product schema.org markup generated from your real content - never invented.",
       },
       {
         icon: "monitor",
         title: "AI Monitoring",
-        body: "Real questions run against ChatGPT, Gemini, Claude and more — tracking mentions, sentiment and citations.",
+        body: "Real questions run against ChatGPT, Gemini, Claude and more - tracking mentions, sentiment and citations.",
       },
       {
         icon: "scores",
         title: "Visibility Scores",
-        body: "Six transparent 0-100 scores show exactly how AI sees your brand — and why.",
+        body: "Six transparent 0-100 scores show exactly how AI sees your brand - and why.",
       },
       {
         icon: "recs",
@@ -167,7 +167,7 @@ export const en = {
     h2pre: "Your AI presence,",
     h2accent: "measured",
     h2post: "",
-    sub: "Six transparent scores updated by real scans — so you always know how answer engines see you.",
+    sub: "Six transparent scores updated by real scans - so you always know how answer engines see you.",
     scoreLabels: ["AI Visibility", "GEO", "AEO", "SEO", "Trust", "Citation"],
     trendLabel: "AI Visibility · last 12 scans",
     trendUp: "▲ trending up",
@@ -252,7 +252,7 @@ export const en = {
     items: [
       {
         q: "What is AEO/GEO?",
-        a: "AEO (Answer Engine Optimization) and GEO (Generative Engine Optimization) are the practice of making your business findable, accurately described and recommendable by AI assistants like ChatGPT, Gemini, Claude and Perplexity — the way SEO does for Google.",
+        a: "AEO (Answer Engine Optimization) and GEO (Generative Engine Optimization) are the practice of making your business findable, accurately described and recommendable by AI assistants like ChatGPT, Gemini, Claude and Perplexity - the way SEO does for Google.",
       },
       {
         q: "How is it different from SEO?",
@@ -264,7 +264,7 @@ export const en = {
       },
       {
         q: "How do you measure AI visibility?",
-        a: "We regularly send realistic customer questions to AI platforms and analyze the answers: whether you are mentioned, the sentiment, and which sources get cited. The results roll up into six transparent 0-100 scores — AI Visibility, GEO, AEO, SEO, Trust and Citation — with formulas you can inspect.",
+        a: "We regularly send realistic customer questions to AI platforms and analyze the answers: whether you are mentioned, the sentiment, and which sources get cited. The results roll up into six transparent 0-100 scores - AI Visibility, GEO, AEO, SEO, Trust and Citation - with formulas you can inspect.",
       },
       {
         q: "Do I need technical skills?",
@@ -272,14 +272,14 @@ export const en = {
       },
       {
         q: "When will it launch?",
-        a: "AEO.GEO is in active development with an early-access program. Join the waitlist and we'll invite you as onboarding slots open — early members get founding pricing.",
+        a: "AEO.GEO is in active development with an early-access program. Join the waitlist and we'll invite you as onboarding slots open - early members get founding pricing.",
       },
     ],
   },
   finalCta: {
     h2pre: "Be visible when",
     h2accent: "AI answers.",
-    sub: "Join the early-access list — founding members get onboarding first and keep launch pricing.",
+    sub: "Join the early-access list - founding members get onboarding first and keep launch pricing.",
   },
   footer: {
     tagline: "Make your brand understood by AI answer engines.",
