@@ -23,6 +23,7 @@ openai>=1.30,<2.0   # only used in live embedding mode
 # --- HTTP / serving ---
 requests>=2.31,<3.0
 gunicorn>=22.0,<24.0
+whitenoise>=6.6,<7.0
 
 # --- Website Manager (Stage 3): crawling ---
 beautifulsoup4>=4.12,<5.0

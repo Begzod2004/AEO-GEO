@@ -10,6 +10,7 @@ from apps.ai_optimization.serializers import (
     SchemaMarkupSerializer,
 )
 from apps.ai_optimization.tasks import generate_schema_task
+from apps.common.audit import record
 from apps.organizations.permissions import IsOrgMember
 
 
@@ -37,6 +38,8 @@ class SchemaMarkupViewSet(viewsets.ReadOnlyModelViewSet):
             else [requested]
         )
 
+        record("schema.generate", user=request.user,
+               organization_id_meta=organization_pk, types=[str(t) for t in types])
         created = []
         for schema_type in types:
             markup = SchemaMarkup.objects.create(

@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from apps.common import mode
 from apps.common.models import Lead
+from apps.common.throttling import WaitlistRateThrottle
 
 
 class HealthView(APIView):
@@ -40,6 +41,7 @@ class WaitlistView(APIView):
 
     permission_classes = [AllowAny]
     authentication_classes: list = []
+    throttle_classes = [WaitlistRateThrottle]
 
     def post(self, request):
         serializer = WaitlistSerializer(data=request.data)

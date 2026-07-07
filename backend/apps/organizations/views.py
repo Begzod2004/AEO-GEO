@@ -1,5 +1,7 @@
 """Organization, member, invite and domain endpoints — all tenant-isolated."""
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -7,6 +9,7 @@ from rest_framework.response import Response
 
 from apps.accounts.invites import make_invite_token
 from apps.accounts.models import Role
+from apps.common.audit import record
 from apps.organizations.models import Domain, Membership, Organization
 from apps.organizations.permissions import HasRole, IsOrgMember
 from apps.organizations.serializers import (
@@ -47,6 +50,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         Membership.objects.create(
             user=self.request.user, organization=org, role=Role.ORG_OWNER
         )
+        record("org.create", user=self.request.user, organization=org)
 
     @action(detail=True, methods=["get"])
     def members(self, request, pk=None):
@@ -81,6 +85,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         data = MembershipSerializer(membership).data
         # A user who can't log in yet (no usable password) needs an invite link
         # to set one. Existing accounts are simply added.
+        org = Organization.objects.filter(id=pk).first()
         if user.has_usable_password():
             data["status"] = "added"
         else:
@@ -88,6 +93,24 @@ class OrganizationViewSet(viewsets.ModelViewSet):
             data["status"] = "invited"
             data["invite_token"] = token
             data["invite_url"] = f"/accept-invite?token={token}"
+            # Email the activation link (console backend in dev; a mail hiccup
+            # must not fail the invite — the link is also in the response).
+            link = f"{settings.FRONTEND_URL}/accept-invite?token={token}"
+            send_mail(
+                f"You've been invited to {org.name if org else 'a team'} on AEO.GEO",
+                "You've been invited to join a team on AEO.GEO.\n\n"
+                f"Activate your account here (valid for 48 hours): {link}",
+                None,
+                [email],
+                fail_silently=True,
+            )
+        record(
+            "org.invite",
+            user=request.user,
+            organization=org,
+            invited=email,
+            role=role,
+        )
 
         return Response(
             data,

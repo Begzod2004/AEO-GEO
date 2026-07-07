@@ -14,6 +14,7 @@ from apps.knowledge_base.serializers import (
     DocumentSerializer,
     SearchSerializer,
 )
+from apps.common.audit import record
 from apps.knowledge_base.tasks import process_document_task
 from apps.organizations.permissions import IsOrgMember
 
@@ -39,6 +40,9 @@ class DocumentViewSet(viewsets.ModelViewSet):
         document = serializer.save(
             organization_id=self.kwargs["organization_pk"]
         )
+        record("document.upload", user=request.user,
+               organization=document.organization,
+               source_type=document.source_type, title=document.title)
         # Ingest off the request cycle; client polls the status endpoint.
         process_document_task.delay(document.id)
         document.refresh_from_db()  # eager mode (tests) already processed it

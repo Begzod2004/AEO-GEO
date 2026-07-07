@@ -2,6 +2,8 @@ from django.urls import path
 
 from apps.accounts.views import (
     AcceptInviteView,
+    ForgotPasswordView,
+    ResetPasswordView,
     LoginView,
     LogoutView,
     MeView,
@@ -16,4 +18,6 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name="logout"),
     path("me/", MeView.as_view(), name="me"),
     path("accept-invite/", AcceptInviteView.as_view(), name="accept-invite"),
+    path("forgot-password/", ForgotPasswordView.as_view(), name="forgot-password"),
+    path("reset-password/", ResetPasswordView.as_view(), name="reset-password"),
 ]

@@ -123,8 +123,8 @@ class CrawlEndpointTests(APITestCase):
         self.assertEqual(resp.data["meta"]["performance_score"], 90)
 
         listed = self.client.get(f"/api/organizations/{self.org.id}/crawl-results/")
-        self.assertEqual(len(listed.data), 1)
-        self.assertEqual(listed.data[0]["domain_url"], "https://acme.example")
+        self.assertEqual(len(listed.data["results"]), 1)
+        self.assertEqual(listed.data["results"][0]["domain_url"], "https://acme.example")
 
     def test_trigger_without_domain_returns_400(self):
         empty_org = Organization.objects.create(name="Empty", slug="empty")

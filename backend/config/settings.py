@@ -76,6 +76,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -184,6 +185,14 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# WhiteNoise serves compressed static files straight from the app in prod.
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
+
 # Uploaded knowledge-base documents.
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -206,7 +215,17 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
     ),
+    # Bounded list responses: {count, next, previous, results}.
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 50,
 }
+
+# Anti-brute-force rates for the custom throttles in apps.common.throttling.
+# None disables a throttle (default in tests so suites don't trip limits).
+AUTH_THROTTLE_RATE = env("AUTH_THROTTLE_RATE", default=None if TESTING else "10/min")
+WAITLIST_THROTTLE_RATE = env(
+    "WAITLIST_THROTTLE_RATE", default=None if TESTING else "30/hour"
+)
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
@@ -221,3 +240,36 @@ SIMPLE_JWT = {
 # CORS
 # ---------------------------------------------------------------------------
 CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
+
+# ---------------------------------------------------------------------------
+# Email (console in dev; point EMAIL_BACKEND/SMTP vars at a real server in prod)
+# ---------------------------------------------------------------------------
+EMAIL_BACKEND = env(
+    "EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
+)
+EMAIL_HOST = env("EMAIL_HOST", default="")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="AEO.GEO <no-reply@aeo.geo>")
+
+# Where invite / password-reset links point (the dashboard SPA).
+FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:5173").rstrip("/")
+
+# Password-reset links are valid for 1 hour.
+PASSWORD_RESET_TIMEOUT = 3600
+
+# ---------------------------------------------------------------------------
+# Production hardening (compose sets DJANGO_DEBUG=true for local dev)
+# ---------------------------------------------------------------------------
+if not DEBUG:
+    if SECRET_KEY == "dev-insecure-change-me":
+        from django.core.exceptions import ImproperlyConfigured
+
+        raise ImproperlyConfigured(
+            "DJANGO_SECRET_KEY must be set to a strong value in production."
+        )
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

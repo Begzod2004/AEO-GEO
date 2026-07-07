@@ -129,7 +129,7 @@ class SchemaEndpointTests(GenerationBase):
         listed = self.client.get(
             f"/api/organizations/{self.org.id}/schema-markup/"
         )
-        self.assertEqual(len(listed.data), 2)
+        self.assertEqual(len(listed.data["results"]), 2)
 
     def test_faq_without_kb_is_marked_failed(self):
         self.auth(self.user)  # no KB seeded

@@ -14,6 +14,8 @@ import { WebsitePage } from "@/pages/WebsitePage";
 import { SchemaPage } from "@/pages/SchemaPage";
 import { SettingsPage } from "@/pages/SettingsPage";
 import { AcceptInvitePage } from "@/pages/AcceptInvitePage";
+import { ForgotPasswordPage } from "@/pages/ForgotPasswordPage";
+import { ResetPasswordPage } from "@/pages/ResetPasswordPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 
 export default function App() {
@@ -28,6 +30,7 @@ export default function App() {
                 <Route element={<PublicOnlyRoute />}>
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 </Route>
 
                 {/* Authenticated routes */}
@@ -48,6 +51,7 @@ export default function App() {
 
                 {/* Invite links work whether or not someone is signed in */}
                 <Route path="/accept-invite" element={<AcceptInvitePage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
 
                 <Route path="/404" element={<NotFoundPage />} />
                 <Route path="*" element={<Navigate to="/404" replace />} />

@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.common.audit import record
 from apps.organizations.models import Domain
 from apps.organizations.permissions import IsOrgMember
 from apps.website_manager.models import CrawlResult
@@ -36,6 +37,8 @@ class CrawlTriggerView(APIView):
             )
 
         crawl = CrawlResult.objects.create(domain=domain)
+        record("crawl.trigger", user=request.user,
+               organization=domain.organization, domain=domain.url)
         crawl_domain_task.delay(crawl.id)
         crawl.refresh_from_db()  # eager mode (tests) already populated it
         return Response(

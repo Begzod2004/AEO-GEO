@@ -1,6 +1,7 @@
 """Organization / membership / domain tests — with the critical multi-tenant
 isolation checks: a user must never see or touch another org's data."""
 from django.contrib.auth import get_user_model
+from django.core import mail
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -49,7 +50,7 @@ class OrganizationFlowTests(OrgTestBase):
         self.auth(self.make_user("u2@example.com"))
         self.create_org("Org Two")
         resp = self.client.get("/api/organizations/")
-        names = [o["name"] for o in resp.data]
+        names = [o["name"] for o in resp.data["results"]]
         self.assertEqual(names, ["Org Two"])
 
     def test_invite_adds_member_and_lists(self):
@@ -77,8 +78,8 @@ class OrganizationFlowTests(OrgTestBase):
         )
         self.assertEqual(created.status_code, status.HTTP_201_CREATED)
         listed = self.client.get(f"/api/organizations/{org_id}/domains/")
-        self.assertEqual(len(listed.data), 1)
-        self.assertEqual(listed.data[0]["url"], "https://acme.example")
+        self.assertEqual(len(listed.data["results"]), 1)
+        self.assertEqual(listed.data["results"][0]["url"], "https://acme.example")
 
 
 class TenantIsolationTests(OrgTestBase):
@@ -167,6 +168,15 @@ class InviteAcceptFlowTests(OrgTestBase):
     def setUp(self):
         self.auth(self.make_user("owner@ex.com"))
         self.org = self.create_org("Acme").data["id"]
+
+    def test_invite_sends_activation_email(self):
+        self.client.post(
+            f"/api/organizations/{self.org}/invite/",
+            {"email": "mailme@ex.com", "role": Role.WRITER}, format="json",
+        )
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("accept-invite?token=", mail.outbox[0].body)
+        self.assertEqual(mail.outbox[0].to, ["mailme@ex.com"])
 
     def test_new_invite_returns_token_and_can_be_accepted(self):
         inv = self.client.post(

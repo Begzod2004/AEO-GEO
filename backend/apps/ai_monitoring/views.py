@@ -14,6 +14,7 @@ from apps.ai_monitoring.models import Prompt, ScanResult
 from apps.ai_monitoring.serializers import PromptSerializer, ScanResultSerializer
 from apps.ai_monitoring.tasks import generate_prompts, run_ai_scan
 from apps.organizations.models import Organization
+from apps.common.audit import record
 from apps.organizations.permissions import IsOrgMember
 
 
@@ -62,6 +63,8 @@ class ScanTriggerView(APIView):
     permission_classes = [IsAuthenticated, IsOrgMember]
 
     def post(self, request, organization_pk=None):
+        record("scan.trigger", user=request.user,
+               organization_id_meta=organization_pk)
         run_ai_scan.delay(int(organization_pk))
         return Response(
             {"detail": "Scan dispatched."}, status=status.HTTP_202_ACCEPTED

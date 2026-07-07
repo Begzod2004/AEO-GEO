@@ -147,7 +147,7 @@ class PromptEndpointTests(MonitoringBase):
 
         listed = self.client.get(f"/api/organizations/{self.org.id}/prompts/")
         self.assertEqual(listed.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(listed.data), 1)
+        self.assertEqual(len(listed.data["results"]), 1)
 
     def test_scan_endpoint_dispatches_and_results_listable(self):
         generate_prompts(self.org)
@@ -159,7 +159,7 @@ class PromptEndpointTests(MonitoringBase):
 
         listed = self.client.get(f"/api/organizations/{self.org.id}/scan-results/")
         self.assertEqual(listed.status_code, status.HTTP_200_OK)
-        self.assertGreater(len(listed.data), 0)
+        self.assertGreater(len(listed.data["results"]), 0)
 
     def test_outsider_is_forbidden(self):
         outsider = User.objects.create_user(
