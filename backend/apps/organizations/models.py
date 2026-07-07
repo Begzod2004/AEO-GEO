@@ -22,6 +22,8 @@ class Organization(TimeStampedModel):
     )
     industry = models.CharField(max_length=120, blank=True)
     primary_language = models.CharField(max_length=12, default="en")
+    # Opt-in: expose an AI-crawlable public profile at /p/<slug>/ (+ llms.txt).
+    public_profile = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

@@ -168,6 +168,20 @@ export const kbApi = {
 
 /* ------------------------ AI Optimization --------------------------- */
 export const schemaApi = {
+  async llmsTxt(orgId: string | number) {
+    const { data } = await http.get<{
+      content: string;
+      public_profile: boolean;
+      public_url: string;
+    }>(`/organizations/${oid(orgId)}/schema-markup/llms-txt/`);
+    return data;
+  },
+  async setPublicProfile(orgId: string | number, value: boolean) {
+    const { data } = await http.patch(`/organizations/${oid(orgId)}/`, {
+      public_profile: value,
+    });
+    return data;
+  },
   async list(orgId: string | number) {
     const { data } = await http.get(`/organizations/${oid(orgId)}/schema-markup/`);
     return asList<SchemaMarkup>(data);

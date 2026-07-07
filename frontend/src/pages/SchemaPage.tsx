@@ -12,6 +12,7 @@ import { IconCheck, IconSchema, IconSparkles, IconX } from "@/components/ui/icon
 import { useOrg } from "@/context/OrgContext";
 import { useToast } from "@/context/ToastContext";
 import { useApiData } from "@/hooks/useApiData";
+import { PublishCard } from "@/components/schema/PublishCard";
 import { schemaApi } from "@/lib/api";
 import { apiError } from "@/lib/http";
 import { formatDate } from "@/lib/format";
@@ -69,6 +70,11 @@ export function SchemaPage() {
 
   const items = data ?? [];
 
+  const latestValid = (data ?? []).find((m) => m.is_valid && m.json_ld);
+  const jsonLdSnippet = latestValid
+    ? `<script type="application/ld+json">\n${JSON.stringify(latestValid.json_ld, null, 2)}\n</script>`
+    : null;
+
   return (
     <div>
       <PageHeader
@@ -76,6 +82,10 @@ export function SchemaPage() {
         title="Schema"
         description="Generate schema.org structured data so engines can read your pages with confidence. Valid FAQ and Organization markup lifts your AEO score."
       />
+
+      <div className="mb-6">
+        <PublishCard orgId={orgId} jsonLdSnippet={jsonLdSnippet} />
+      </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
         <Card className="h-fit p-5 sm:p-6">

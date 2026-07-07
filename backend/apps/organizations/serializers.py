@@ -17,7 +17,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
         model = Organization
         fields = (
             "id", "name", "slug", "plan", "industry",
-            "primary_language", "created_at",
+            "primary_language", "public_profile", "created_at",
         )
         read_only_fields = ("id", "slug", "created_at")
 

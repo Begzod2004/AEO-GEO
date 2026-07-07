@@ -9,8 +9,10 @@ from apps.ai_optimization.serializers import (
     GenerateSchemaSerializer,
     SchemaMarkupSerializer,
 )
+from apps.ai_optimization.llms_txt import build_llms_txt
 from apps.ai_optimization.tasks import generate_schema_task
 from apps.common.audit import record
+from apps.organizations.models import Organization
 from apps.organizations.permissions import IsOrgMember
 
 
@@ -24,6 +26,16 @@ class SchemaMarkupViewSet(viewsets.ReadOnlyModelViewSet):
         return SchemaMarkup.objects.filter(
             organization_id=self.kwargs["organization_pk"]
         )
+
+    @action(detail=False, methods=["get"], url_path="llms-txt")
+    def llms_txt(self, request, organization_pk=None):
+        """Preview the generated llms.txt for this organization (members)."""
+        org = Organization.objects.get(id=organization_pk)
+        return Response({
+            "content": build_llms_txt(org),
+            "public_profile": org.public_profile,
+            "public_url": f"/p/{org.slug}/",
+        })
 
     @action(detail=False, methods=["post"], url_path="generate")
     def generate(self, request, organization_pk=None):

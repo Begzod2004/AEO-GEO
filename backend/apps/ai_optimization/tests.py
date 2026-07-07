@@ -160,3 +160,70 @@ class SchemaEndpointTests(GenerationBase):
             ).status_code,
             status.HTTP_403_FORBIDDEN,
         )
+
+
+class AiDeliveryTests(GenerationBase):
+    """llms.txt + the public AI-crawlable profile (the 'reach the AI' half)."""
+
+    def _generate_schema(self):
+        self.auth(self.user)
+        self.client.post(
+            f"/api/organizations/{self.org.id}/schema-markup/generate/",
+            {"schema_type": "all"}, format="json",
+        )
+
+    def test_llms_txt_is_grounded_and_member_only(self):
+        self.seed_kb()
+        self._generate_schema()
+        resp = self.client.get(
+            f"/api/organizations/{self.org.id}/schema-markup/llms-txt/"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        content = resp.data["content"]
+        self.assertIn("# Acme", content)                 # org name
+        self.assertIn("https://acme.io", content)        # real domain
+        self.assertIn("## FAQ", content)                 # from generated schema
+        self.assertIn("What does Acme do?", content)
+
+        outsider = User.objects.create_user(
+            email="out2@evil.io", password="Str0ngPass!23"
+        )
+        self.auth(outsider)
+        self.assertEqual(
+            self.client.get(
+                f"/api/organizations/{self.org.id}/schema-markup/llms-txt/"
+            ).status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+
+    def test_public_profile_requires_opt_in(self):
+        self.seed_kb()
+        self._generate_schema()
+        # not published -> 404 for both public URLs
+        self.assertEqual(self.client.get(f"/p/{self.org.slug}/").status_code, 404)
+        self.assertEqual(
+            self.client.get(f"/p/{self.org.slug}/llms.txt").status_code, 404
+        )
+
+        # publish via the normal org update (owner)
+        self.auth(self.user)
+        upd = self.client.patch(
+            f"/api/organizations/{self.org.id}/",
+            {"public_profile": True}, format="json",
+        )
+        self.assertEqual(upd.status_code, status.HTTP_200_OK)
+
+        # public page now serves HTML with embedded JSON-LD (no auth needed)
+        self.client.credentials()
+        page = self.client.get(f"/p/{self.org.slug}/")
+        self.assertEqual(page.status_code, 200)
+        html = page.content.decode()
+        self.assertIn("application/ld+json", html)
+        self.assertIn("FAQPage", html)
+        self.assertIn("Acme", html)
+        self.assertIn("llms.txt", html)
+
+        txt = self.client.get(f"/p/{self.org.slug}/llms.txt")
+        self.assertEqual(txt.status_code, 200)
+        self.assertIn("# Acme", txt.content.decode())
+        self.assertEqual(txt["Content-Type"], "text/plain; charset=utf-8")
