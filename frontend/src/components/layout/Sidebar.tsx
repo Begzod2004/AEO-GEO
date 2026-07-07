@@ -1,9 +1,11 @@
 import { NavLink } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import { Logo } from "@/components/brand/Logo";
 import { cn } from "@/lib/cn";
 import { NAV_ITEMS } from "./nav";
 
 export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
+  const { user } = useAuth();
   return (
     <div className="flex h-full flex-col">
       <div className="flex h-16 items-center px-5">
@@ -11,6 +13,15 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       </div>
 
       <nav className="flex-1 space-y-1 px-3 py-2" aria-label="Primary">
+        {user?.is_superuser && (
+          <NavLink
+            to="/admin"
+            onClick={onNavigate}
+            className="mb-2 flex items-center gap-2 rounded-control border border-brand/30 bg-brand/10 px-3 py-2 text-sm font-medium text-brand hover:bg-brand/15"
+          >
+            ◈ Platform admin
+          </NavLink>
+        )}
         <p className="eyebrow px-3 pb-2 pt-3">Workspace</p>
         {NAV_ITEMS.map((item) => (
           <NavLink

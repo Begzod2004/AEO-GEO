@@ -1,5 +1,10 @@
 import { http } from "./http";
 import type {
+  PlatformAuditRow,
+  PlatformLead,
+  PlatformOrg,
+  PlatformOverview,
+  PlatformUser,
   CrawlResult,
   DashboardResponse,
   Domain,
@@ -201,5 +206,29 @@ export const scanApi = {
   async results(orgId: string | number) {
     const { data } = await http.get(`/organizations/${oid(orgId)}/scan-results/`);
     return asList<ScanResult>(data);
+  },
+};
+
+
+export const platformApi = {
+  async overview() {
+    const { data } = await http.get<PlatformOverview>("/platform/overview/");
+    return data;
+  },
+  async leads() {
+    const { data } = await http.get("/platform/leads/");
+    return asList<PlatformLead>(data);
+  },
+  async users() {
+    const { data } = await http.get("/platform/users/");
+    return asList<PlatformUser>(data);
+  },
+  async organizations() {
+    const { data } = await http.get("/platform/organizations/");
+    return asList<PlatformOrg>(data);
+  },
+  async audit() {
+    const { data } = await http.get("/platform/audit/");
+    return asList<PlatformAuditRow>(data);
   },
 };

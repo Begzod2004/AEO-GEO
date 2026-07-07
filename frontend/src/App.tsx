@@ -4,7 +4,7 @@ import { OrgProvider } from "@/context/OrgContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ToastProvider } from "@/context/ToastContext";
 import { AppShell } from "@/components/layout/AppShell";
-import { ProtectedRoute, PublicOnlyRoute, RequireOrg } from "@/routes/guards";
+import { ProtectedRoute, PublicOnlyRoute, RequireOrg, RequireSuperuser } from "@/routes/guards";
 import { LoginPage } from "@/pages/LoginPage";
 import { RegisterPage } from "@/pages/RegisterPage";
 import { OnboardingPage } from "@/pages/OnboardingPage";
@@ -16,6 +16,7 @@ import { SettingsPage } from "@/pages/SettingsPage";
 import { AcceptInvitePage } from "@/pages/AcceptInvitePage";
 import { ForgotPasswordPage } from "@/pages/ForgotPasswordPage";
 import { ResetPasswordPage } from "@/pages/ResetPasswordPage";
+import { AdminPanelPage } from "@/pages/AdminPanelPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 
 export default function App() {
@@ -36,6 +37,11 @@ export default function App() {
                 {/* Authenticated routes */}
                 <Route element={<ProtectedRoute />}>
                   <Route path="/onboarding" element={<OnboardingPage />} />
+
+                  {/* Superuser-only platform monitoring (no org required) */}
+                  <Route element={<RequireSuperuser />}>
+                    <Route path="/admin" element={<AdminPanelPage />} />
+                  </Route>
 
                   {/* Requires a selected organization */}
                   <Route element={<RequireOrg />}>

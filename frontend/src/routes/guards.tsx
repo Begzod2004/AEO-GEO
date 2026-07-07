@@ -40,3 +40,12 @@ export function PublicOnlyRoute() {
   if (isAuthenticated) return <Navigate to="/" replace />;
   return <Outlet />;
 }
+
+
+/** Superusers only — everyone else goes back to the app. */
+export function RequireSuperuser() {
+  const { user, loading } = useAuth();
+  if (loading) return <Splash label="Tuning in…" />;
+  if (!user?.is_superuser) return <Navigate to="/" replace />;
+  return <Outlet />;
+}

@@ -10,6 +10,8 @@ import { Spinner } from "@/components/ui/Spinner";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { UserMenu } from "@/components/layout/UserMenu";
 import { IconBuilding, IconCheck, IconGlobe, IconPlus } from "@/components/ui/icons";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import { useOrg } from "@/context/OrgContext";
 import { useToast } from "@/context/ToastContext";
 import { orgApi } from "@/lib/api";
@@ -29,6 +31,7 @@ const INDUSTRIES = [
 ];
 
 export function OnboardingPage() {
+  const { user } = useAuth();
   const { orgs, currentOrg, selectOrg, refresh, loading } = useOrg();
   const toast = useToast();
   const navigate = useNavigate();
@@ -110,6 +113,14 @@ export function OnboardingPage() {
 
       <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
         <div className="mb-8">
+          {user?.is_superuser && (
+            <Link
+              to="/admin"
+              className="mb-4 inline-flex items-center gap-2 rounded-control border border-brand/30 bg-brand/10 px-3.5 py-2 text-sm font-medium text-brand hover:bg-brand/15"
+            >
+              ◈ Open Platform admin
+            </Link>
+          )}
           <p className="eyebrow mb-1.5">Set up your workspace</p>
           <h1 className="font-display text-2xl font-bold tracking-tight text-text sm:text-3xl">
             {hasOrgs ? "Your organizations" : "Create your first organization"}

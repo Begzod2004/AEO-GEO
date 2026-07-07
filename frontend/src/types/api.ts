@@ -8,6 +8,8 @@ export interface User {
   id: number | string;
   email: string;
   full_name?: string | null;
+  is_staff?: boolean;
+  is_superuser?: boolean;
 }
 
 export interface LoginResponse {
@@ -180,3 +182,59 @@ export interface DashboardResponse {
 
 /** The six metric keys, in canonical spectrum order. */
 export type MetricKey = keyof ScoreSet;
+
+
+/* ------------------------ Platform admin ------------------------ */
+export interface PlatformOverview {
+  totals: {
+    users: number;
+    organizations: number;
+    leads: number;
+    documents: number;
+    prompts: number;
+    scan_results: number;
+    score_snapshots: number;
+  };
+  last_7_days: { new_users: number; new_leads: number; scans: number };
+  mode: string;
+  providers: Record<string, string>;
+  timeseries: { date: string; signups: number; leads: number; scans: number }[];
+}
+
+export interface PlatformLead {
+  id: number;
+  email: string;
+  source: string;
+  created_at: string;
+}
+
+export interface PlatformUser {
+  id: number;
+  email: string;
+  full_name?: string | null;
+  is_staff: boolean;
+  is_superuser: boolean;
+  date_joined: string;
+  organizations: string[];
+}
+
+export interface PlatformOrg {
+  id: number;
+  name: string;
+  slug: string;
+  plan: string;
+  industry: string;
+  created_at: string;
+  members: number;
+  documents_count: number;
+  scans: number;
+}
+
+export interface PlatformAuditRow {
+  id: number;
+  action: string;
+  user_email?: string | null;
+  organization_name?: string | null;
+  meta: Record<string, unknown>;
+  created_at: string;
+}
