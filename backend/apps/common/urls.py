@@ -1,7 +1,10 @@
 from django.urls import path
 
 from apps.common.platform import (
+    PlatformActionView,
     PlatformAuditView,
+    PlatformHealthView,
+    PlatformIssuesView,
     PlatformLeadsView,
     PlatformOrganizationsView,
     PlatformOverviewView,
@@ -18,4 +21,7 @@ urlpatterns = [
     path("platform/users/", PlatformUsersView.as_view(), name="platform-users"),
     path("platform/organizations/", PlatformOrganizationsView.as_view(), name="platform-organizations"),
     path("platform/audit/", PlatformAuditView.as_view(), name="platform-audit"),
+    path("platform/health/", PlatformHealthView.as_view(), name="platform-health"),
+    path("platform/issues/", PlatformIssuesView.as_view(), name="platform-issues"),
+    path("platform/actions/", PlatformActionView.as_view(), name="platform-actions"),
 ]

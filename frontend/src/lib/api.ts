@@ -1,6 +1,8 @@
 import { http } from "./http";
 import type {
   PlatformAuditRow,
+  PlatformHealth,
+  PlatformIssues,
   PlatformLead,
   PlatformOrg,
   PlatformOverview,
@@ -230,5 +232,20 @@ export const platformApi = {
   async audit() {
     const { data } = await http.get("/platform/audit/");
     return asList<PlatformAuditRow>(data);
+  },
+  async health() {
+    const { data } = await http.get<PlatformHealth>("/platform/health/");
+    return data;
+  },
+  async issues() {
+    const { data } = await http.get<PlatformIssues>("/platform/issues/");
+    return data;
+  },
+  async action(body: { action: string; id?: number | string; plan?: string }) {
+    const { data } = await http.post<{ ok: boolean; detail?: string; is_active?: boolean }>(
+      "/platform/actions/",
+      body,
+    );
+    return data;
   },
 };

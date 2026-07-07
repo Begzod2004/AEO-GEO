@@ -214,6 +214,7 @@ export interface PlatformUser {
   full_name?: string | null;
   is_staff: boolean;
   is_superuser: boolean;
+  is_active?: boolean;
   date_joined: string;
   organizations: string[];
 }
@@ -237,4 +238,26 @@ export interface PlatformAuditRow {
   organization_name?: string | null;
   meta: Record<string, unknown>;
   created_at: string;
+}
+
+export interface PlatformHealth {
+  database: string;
+  redis_cache: string;
+  qdrant: string;
+  celery_worker: string;
+  overall: string;
+}
+
+export interface PlatformIssue {
+  id: number;
+  kind: "document" | "crawl" | "schema";
+  title: string;
+  organization: string;
+  error: string;
+  when: string;
+}
+
+export interface PlatformIssues {
+  count: number;
+  items: PlatformIssue[];
 }
