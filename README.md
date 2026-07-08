@@ -914,6 +914,115 @@ Pagination on all lists, broken-link probes capped, per-tenant vector collection
 
 <br/>
 
+## 🎨 Design Language — "Signal Spectrum"
+
+<div align="center"><i>The product tells you whether AI engines <b>see</b> you — so the six scores are treated as bands of a signal spectrum an instrument reads off the engines.</i></div>
+
+<br/>
+
+<table>
+<tr>
+<td valign="top" width="50%">
+
+**Palette**
+- Observatory ink `#080B12` (background)
+- Iris violet `#7C6BFF` (brand accent)
+- Cyan `#22D3EE` (signal / success)
+- Six-hue metric spectrum: violet → sky → teal → lime → amber → rose
+- Full light + dark theme, WCAG-audited contrast
+
+**Type**
+- `Space Grotesk` — display & big numbers
+- `Inter` — body
+- `JetBrains Mono` — data, eyebrows, JSON
+- All bundled for offline, zero layout shift
+
+</td>
+<td valign="top" width="50%">
+
+**Signature moments**
+- A spectrum-readout hero: six live signal bands
+- Radial-gauge stat cards sharing the spectrum hues
+- Six-series recharts trend, one color per metric
+- A 3D knowledge-graph hero on the landing (R3F) that degrades to a static SVG on mobile / reduced-motion
+
+**Discipline**
+- One accent, locked across the page
+- Motion is motivated or absent
+- Reduced-motion and JS-off are first-class
+- Audited against an anti-"AI-slop" taste checklist — em-dash-free copy, restrained eyebrows, no templated defaults
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+## ⚙️ Configuration
+
+<div align="center"><i>Everything is environment-driven. Nothing is hardcoded. Blank AI keys → mock mode.</i></div>
+
+<br/>
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `DJANGO_SECRET_KEY` | dev key* | App secret. **Production refuses to boot with the dev key.** |
+| `DJANGO_DEBUG` | `false` | Debug toggle |
+| `POSTGRES_URL` | sqlite fallback | Primary database |
+| `REDIS_URL` | `redis://…` | Cache · broker · token registry |
+| `QDRANT_URL` | `http://…:6333` | Vector database |
+| `AEO_MODE` | `auto` | `auto` (mock unless key) · `mock` · `live` |
+| `OPENAI_API_KEY` | — | Live OpenAI (scans + embeddings) |
+| `ANTHROPIC_API_KEY` | — | Live Claude |
+| `GOOGLE_AI_API_KEY` | — | Live Gemini |
+| `EMAIL_BACKEND` | console | SMTP in production |
+| `FRONTEND_URL` | `:5173` | Where invite / reset links point |
+| `AUTH_THROTTLE_RATE` | `10/min` | Credential-endpoint rate limit |
+| `WAITLIST_THROTTLE_RATE` | `30/hour` | Public waitlist rate limit |
+
+<sub>*The dev default exists only for local convenience; production validation rejects it.</sub>
+
+<br/>
+
+## 🧪 Testing & Quality
+
+<table>
+<tr>
+<td valign="top" width="50%">
+
+**Backend — 89 tests, fully offline**
+No external services in CI: SQLite, in-memory Qdrant (`:memory:`), eager Celery, LocMem cache, deterministic mock AI. Covers auth flows, tenant isolation (outsiders get `403/404`), RBAC, the full ingest→embed→search chain, grounded schema, scoring formulas, throttling (`429`), password reset (one-time token), the AI-delivery surface, and every platform-admin action.
+
+</td>
+<td valign="top" width="50%">
+
+**Frontend — typechecked builds + browser drives**
+`tsc -b` gates every build for both the SPA and the landing. Critical flows are driven in a real headless browser against the live backend — register → onboard → upload → scan → dashboard, admin retry-a-failed-job, password-reset — asserting **zero console errors**.
+
+</td>
+</tr>
+</table>
+
+<div align="center">
+
+```mermaid
+flowchart LR
+    PR([Pull request / push]) --> B{{Backend job<br/>89 tests · offline}}
+    PR --> D{{Dashboard job<br/>tsc + vite build}}
+    PR --> L{{Landing job<br/>tsc + next build}}
+    B --> G{all green?}
+    D --> G
+    L --> G
+    G -->|yes| M[✅ merge / deploy]
+    G -->|no| F[❌ blocked]
+    style M fill:#0B2E1F,stroke:#3FB950,color:#E5E7EB
+    style F fill:#2E0B14,stroke:#FB7185,color:#E5E7EB
+```
+
+</div>
+
+<br/>
+
 ## 🗺 Roadmap
 
 ```mermaid
