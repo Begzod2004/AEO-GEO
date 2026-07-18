@@ -111,6 +111,8 @@ services:
     build:
       context: ./landing
       dockerfile: Dockerfile.prod
+      args:
+        SITE_URL: https://${LANDING_DOMAIN}
     image: aeo-geo-landing:prod
     environment:
       AEO_BACKEND_URL: http://backend:8000

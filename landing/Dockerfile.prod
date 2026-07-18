@@ -6,6 +6,11 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+# Pages are statically prerendered here, so the canonical URLs, sitemap, robots
+# and JSON-LD are frozen into the HTML at build time — SITE_URL must be present
+# now, not merely at runtime.
+ARG SITE_URL
+ENV SITE_URL=$SITE_URL
 RUN npm run build
 
 FROM node:22-slim
