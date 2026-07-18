@@ -6,9 +6,7 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { useToast } from "@/context/ToastContext";
 import { useApiData } from "@/hooks/useApiData";
 import { schemaApi } from "@/lib/api";
-import { apiError } from "@/lib/http";
-
-const BACKEND_ORIGIN = "http://localhost:8000"; // dev; prod serves same-origin
+import { apiError, backendUrl } from "@/lib/http";
 
 const AI_ROBOTS_SNIPPET = `# Allow AI answer-engine crawlers (robots.txt)
 User-agent: GPTBot
@@ -64,7 +62,7 @@ export function PublishCard({
   if (loading) return <Skeleton className="h-40 rounded-card" />;
   if (!data) return null;
 
-  const publicUrl = `${BACKEND_ORIGIN}${data.public_url}`;
+  const publicUrl = backendUrl(data.public_url);
 
   return (
     <Card className="p-5 sm:p-6">

@@ -22,7 +22,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
 import { useApiData } from "@/hooks/useApiData";
 import { platformApi } from "@/lib/api";
-import { apiError } from "@/lib/http";
+import { apiError, backendUrl } from "@/lib/http";
 import { formatDate } from "@/lib/format";
 import type { PlatformLead } from "@/types/api";
 
@@ -71,7 +71,7 @@ export function AdminPanelPage() {
               App
             </Link>
             <a
-              href="http://localhost:8000/admin/"
+              href={backendUrl("/admin/")}
               target="_blank"
               rel="noreferrer"
               className="text-brand hover:underline"

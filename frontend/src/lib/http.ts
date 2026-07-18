@@ -12,6 +12,14 @@ const USE_MOCKS = import.meta.env.VITE_USE_MOCKS === "true";
 /** Fired when the session can no longer be recovered (refresh failed / absent). */
 export const AUTH_LOGOUT_EVENT = "aeo:auth-logout";
 
+/** Absolute URL for a page Django serves itself — the public profile, llms.txt,
+ *  the Django admin. In production nginx puts those on our own origin; in dev
+ *  Vite runs on a different port than Django, so we address it directly. */
+export const backendUrl = (path: string) =>
+  import.meta.env.DEV
+    ? `http://localhost:8000${path}`
+    : `${window.location.origin}${path}`;
+
 export const http: AxiosInstance = axios.create({
   baseURL: API_BASE,
   headers: { "Content-Type": "application/json" },

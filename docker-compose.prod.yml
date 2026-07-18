@@ -114,6 +114,8 @@ services:
     image: aeo-geo-landing:prod
     environment:
       AEO_BACKEND_URL: http://backend:8000
+      # Canonical URLs, JSON-LD, sitemap, robots and hreflang all derive from this.
+      SITE_URL: https://${LANDING_DOMAIN}
     restart: unless-stopped
     depends_on:
       backend:

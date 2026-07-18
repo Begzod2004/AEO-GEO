@@ -20,6 +20,12 @@ export default defineConfig({
         target: BACKEND,
         changeOrigin: true,
       },
+      // Django-rendered public profile + llms.txt, so the dev app can link to
+      // them the same same-origin way production does.
+      "/p": {
+        target: BACKEND,
+        changeOrigin: true,
+      },
     },
   },
   build: {
