@@ -7,6 +7,15 @@
 # Django API (APP_DOMAIN). Postgres/Redis/Qdrant are internal-only. See
 # deploy/DEPLOY.md for the full runbook (TLS, seed, backups).
 
+# Capped per service rather than in the daemon config: this stack may share a
+# host with other projects, and changing /etc/docker/daemon.json would restart
+# every container on the box.
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 x-backend-env: &backend-env
   DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?set DJANGO_SECRET_KEY in .env}
   DJANGO_DEBUG: "false"
@@ -33,6 +42,7 @@ x-backend-base: &backend-base
   build: ./backend
   image: aeo-geo-backend:prod
   environment: *backend-env
+  logging: *logging
   restart: unless-stopped
   depends_on:
     postgres:
@@ -51,6 +61,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    logging: *logging
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U aeo -d aeo"]
@@ -60,6 +71,7 @@ services:
 
   redis:
     image: redis:7-alpine
+    logging: *logging
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -71,6 +83,7 @@ services:
     image: qdrant/qdrant:latest
     volumes:
       - qdrant_data:/qdrant/storage
+    logging: *logging
     restart: unless-stopped
 
   backend:
@@ -102,6 +115,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.prod
     image: aeo-geo-dashboard:prod
+    logging: *logging
     restart: unless-stopped
     depends_on:
       backend:
@@ -118,6 +132,7 @@ services:
       AEO_BACKEND_URL: http://backend:8000
       # Canonical URLs, JSON-LD, sitemap, robots and hreflang all derive from this.
       SITE_URL: https://${LANDING_DOMAIN}
+    logging: *logging
     restart: unless-stopped
     depends_on:
       backend:
@@ -132,6 +147,7 @@ services:
       APP_DOMAIN: ${APP_DOMAIN}
     volumes:
       - ./deploy/nginx:/etc/nginx/templates:ro
+    logging: *logging
     restart: unless-stopped
     depends_on:
       - dashboard
